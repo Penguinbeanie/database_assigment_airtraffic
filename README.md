@@ -19,7 +19,7 @@ The project uses a foundation of core aviation data enriched by two external, au
 
 ## Database Schema
 
-The database will consist of six primary tables, with linkages defined by the IATA/ICAO codes and common text fields (`City`, `Country`).
+The database will consist of six primary tables. The linkages are defined by aviation codes (IATA/ICAO) and geographical names.
 
 ### Core Aviation Tables (4)
 
@@ -28,7 +28,7 @@ The database will consist of six primary tables, with linkages defined by the IA
 | `airlines` | Carrier details and operational status. | `Name` (PK), `IATA`, `ICAO`, `Country`, `Active` |
 | `airplanes` | Aircraft model and identification codes. | `Name`, `IATA code` (PK), `ICAO code` |
 | `airports` | Geographic and infrastructure data for every airport. | `IATA` (PK), `Name`, `City`, `Country`, `Latitude`, `Longitude`, `Type` |
-| `routes` | Defined flight segments between two airports. | `Airline` (FK to `airlines.Name`), `Source airport` (FK to `airports.IATA`), `Destination airport` (FK to `airports.IATA`), `Stops`, `Equipment` |
+| `routes` | Defined flight segments between two airports. | **`Route_ID` (PK)**, `Airline` (FK to `airlines.Name`), `Source airport` (FK to `airports.IATA`), `Destination airport` (FK to `airports.IATA`), `Stops`, `Equipment` |
 
 ### Enrichment Tables (2)
 
@@ -36,13 +36,7 @@ These tables introduce the socio-economic context for analysis.
 
 | Table Name | Source | Key Columns | Linkage to `airports` |
 | :--- | :--- | :--- | :--- |
-| `cities_population` | SimpleMaps | **`city`** (PK), **`country`** (PK), `population`, `lat`, `lng` | `airports.City` and `airports.Country` |
-| `countries_economic` | World Bank | **`country`** (PK), `GDP_2023`, `GDP_Per_Capita_2023`, `GDP_PPP_2023` | `airports.Country` |
+| `cities_population` | SimpleMaps | **`city`** (PK/FK), **`country`** (PK/FK), `population`, `lat`, `lng` | **Ideal:** `airports.City` $\leftrightarrow$ `cities_population.city` |
+| `countries_economic` | World Bank | **`country`** (PK), `GDP_2023`, `GDP_Per_Capita_2023`, `GDP_PPP_2023` | **Ideal:** `airports.Country` $\leftrightarrow$ `countries_economic.country` |
 
 ---
-
-### Primary Linkages
-
-1.  **Route Connectivity:** `routes.Source airport` $\leftrightarrow$ `airports.IATA`
-2.  **City Demographics:** `airports.City` and `airports.Country` $\leftrightarrow$ `cities_population.city` and `cities_population.country`
-3.  **National Economics:** `airports.Country` $\leftrightarrow$ `countries_economic.country`
