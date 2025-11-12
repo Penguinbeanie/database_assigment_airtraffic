@@ -5,15 +5,20 @@ This project aims to analyze the structure of the **Global Air Transportation Ne
 
 ---
 
+## Setup and Data Ingestion
+
+This project utilizes `compose.yml` to set up the necessary database environment. Data is then ingested into the database using the `ingestion.sql` script, which populates the tables with cleaned and processed data.
+
+---
+
 ## Data Sources
 
-The project uses a foundation of core aviation data enriched by two external, authoritative sources.
+The project uses a foundation of core aviation data enriched by external, authoritative sources, with all processed data residing in the `clean_data` directory for ingestion.
 
 | Source Name | Data Type | Key Linking Fields | URL |
 | :--- | :--- | :--- | :--- |
 | **Global Air Transportation Network** (Kaggle) | Core Aviation Data | N/A (Internal) | `https://www.kaggle.com/datasets/thedevastator/global-air-transportation-network-mapping-the-wo/data` |
-| **SimpleMaps World Cities** | City Population Data | `city`, `country` | `https://simplemaps.com/data/world-cities` |
-| **World Bank DataBank** | Country Economic Data | `country` | `https://databank.worldbank.org/reports.aspx?source=2...` |
+| **World Bank DataBank** | Country Economic Data | `country` | `https://databank.worldbank.org/source/world-development-indicators` |
 
 ---
 
@@ -30,13 +35,12 @@ The database will consist of six primary tables. The linkages are defined by avi
 | `airports` | Geographic and infrastructure data for every airport. | `IATA` (PK), `Name`, `City`, `Country`, `Latitude`, `Longitude`, `Type` |
 | `routes` | Defined flight segments between two airports. | **`Route_ID` (PK)**, `Airline` (FK to `airlines.Name`), `Source airport` (FK to `airports.IATA`), `Destination airport` (FK to `airports.IATA`), `Stops`, `Equipment` |
 
-### Enrichment Tables (2)
+### Enrichment Tables (1)
 
-These tables introduce the socio-economic context for analysis.
+This table introduces the socio-economic context for analysis.
 
 | Table Name | Source | Key Columns | Linkage to `airports` |
 | :--- | :--- | :--- | :--- |
-| `cities_population` | SimpleMaps | **`city`** (PK/FK), **`country`** (PK/FK), `population`, `lat`, `lng` | **Ideal:** `airports.City` $\leftrightarrow$ `cities_population.city` |
-| `countries_economic` | World Bank | **`country`** (PK), `GDP_2023`, `GDP_Per_Capita_2023`, `GDP_PPP_2023` | **Ideal:** `airports.Country` $\leftrightarrow$ `countries_economic.country` |
+| `countries` | World Bank | **`Country_Name`** (PK), `Time`, `Time_Code`, `Country_Code`, `GDP_current_US`, `GDP_per_capita_current_US`, `Political_Stability`, `Population` | **Ideal:** `airports.Country` $\leftrightarrow$ `countries.Country_Name` |
 
 ---
