@@ -1,8 +1,7 @@
 # Global Air Network Socio-Economic Analysis
 
 ## Project Overview
-This project aims to analyze the structure of the **Global Air Transportation Network** by integrating it with **country-level economic indicators**. The goal is to move beyond simple network connectivity to explore complex analytical questions regarding how national wealth, city population, and air travel infrastructure correlate, focusing on metrics like network centrality, economic disparity, and infrastructure allocation efficiency.
-
+This project aims to analyze the structure of the **Global Air Transportation Network** by integrating it with **country-level economic indicators**. The goal is to move beyond simple network connectivity to explore complex analytical questions regarding how national wealth, stability, and air travel infrastructure correlate.
 ---
 
 ## Setup and Data Ingestion
