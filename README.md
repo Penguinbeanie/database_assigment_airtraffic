@@ -57,3 +57,155 @@ Our data cleaning process makes sure all the information is accurate and works w
     *   **Ensuring All Connections Are Correct:** We thoroughly check that every flight route correctly links to existing airline IDs, airport IDs (for departure and arrival), and airplane types. If not, it is removed.
 *   **Removing Extra Information:** We remove duplicate ID codes (IATA/ICAO) in the airplane data to make sure each code is unique. Also, an unnecessary "index" column is taken out of the airline data.
 *   **Ensuring that each table has a unique and non-null primary key:** For each table, a suitable primary key was selected. If a row had no value, we removed it.
+
+---
+
+# Documentation of Question Design, Adjustments, and Results
+
+##  Database Connection Setup
+
+All analytical SQL queries were executed from a Jupyter Notebook, using a PostgreSQL database running inside Docker. After starting the environment via:
+
+```
+docker compose up -d
+```
+
+the PostgreSQL server becomes available at:
+
+* **Host:** `localhost`
+* **Port:** `5432`
+* **User:** `postgres`
+* **Password:** `postgres`
+* **Database:** `postgres`
+
+We connect to this database using SQLAlchemy:
+
+```python
+from sqlalchemy import create_engine
+import pandas as pd
+
+engine = create_engine("postgresql://postgres:postgres@localhost:5432/postgres")
+```
+
+All queries are executed using:
+
+```python
+pd.read_sql(query, engine)
+```
+
+This allows seamless integration between SQL analysis and visualization tools such as Pandas and Matplotlib.
+
+---
+
+# **Analytical Methodology & Question Design**
+
+To explore the structure of the Global Air Transportation Network and its relation to socio-economic indicators, we developed **10 analytical questions**.
+These questions required precise SQL queries, and several were refined to match the actual structure and limitations of the available dataset.
+
+Below is a detailed description of each question and how it was adapted.
+
+---
+
+# **Question Adjustment Summary (1–10)**
+
+### **1. Top 10 cities by number of airports**
+
+Straightforward aggregation using the `airports` table.
+We filtered out empty city fields and grouped by city + country.
+
+---
+
+### **2. Most commonly used airplane on routes requiring ≥ 1 stop**
+
+Filtered by `Stops >= 1` and counted occurrences of each aircraft type.
+Although multi-stop routes are rare in the dataset, SQL implementation is valid.
+
+---
+
+### **3. Percentage of codeshare routes**
+
+The `Codeshare` column was cleaned to boolean (0/1).
+The share of codeshare flights among all routes was computed.
+
+---
+
+### **4. Original city-population question → replaced with airport-connectivity question**
+
+**Original intention:**
+
+> Examine correlation between a city’s population and airline diversity at its largest airport.
+
+**Issue:**
+Population is available **only at country level**, not city level.
+
+**Revised question:**
+
+> For each country, identify the airport with the highest total traffic (incoming + outgoing routes) and count how many unique airlines serve it.
+
+This preserves the connectivity analysis while fitting available data.
+
+---
+
+### **5. Airports with the highest incoming/outgoing route imbalance**
+
+We define **disparity** as:
+$|\text{outgoing routes} - \text{incoming routes}|$
+A clear and SQL-friendly metric.
+
+---
+
+
+
+### **6. Countries with highest ratio of outgoing routes to GDP per capita**
+
+Calculated total outgoing routes per country, joined with GDP data, and computed:
+
+$\frac{\text{outgoing routes}}{\text{GDP per capita}}$
+
+---
+
+### **7. Original multi-stop city question → replaced with international reachability**
+
+**Original:**
+
+> For each city with more than 1M population, measure average stops to reach major cities.
+
+**Issues:**
+
+* No city population data
+* Stops column rarely > 0
+* Would require recursive pathfinding (not allowed)
+
+**Revised question:**
+
+> For each country, how many unique destination countries can be reached directly?
+
+This produced meaningful results (e.g., France ≈ 112 reachable countries).
+
+---
+
+### **8. Top 10 countries by inbound airline diversity**
+
+For each country, we counted distinct airlines flying into its airports.
+Shows how attractive a country is as a destination market.
+
+---
+
+### **9. Aircraft types used on the largest number of distinct routes**
+
+The `Equipment` column contains space-separated aircraft codes.
+Using `regexp_split_to_table`, we normalized these and counted distinct routes per aircraft type.
+Revealed dominance of Airbus A320/319/321 and Boeing 737 variants.
+
+---
+
+### **10. Countries with the highest percentage of domestic routes**
+
+Defined **domestic route share** as:
+
+$\frac{\text{domestic routes}}{\text{all routes departing from that country}}$
+
+Filtered to include only countries with ≥ 100 outgoing routes.
+Highlights differences between large domestic markets (USA, China, Brazil…) and hub-focused countries (Singapore, Qatar…).
+
+---
