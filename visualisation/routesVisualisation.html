@@ -315,7 +315,6 @@
 
 <script>
     const csvPath = "../clean_data/routes.csv";
-    const MAX_ROWS = 2000;
     const TOP_AIRPORTS = 60;
     const MIN_ROUTE_WEIGHT = 2;
 
@@ -348,7 +347,6 @@
     function loadWithProgress() {
         let loadedRows = 0;
         let rowsBuffer = [];
-        let completedManually = false;
 
         updateProgress(0, "Starting data load...");
 
@@ -369,21 +367,9 @@
                 loadedRows++;
                 rowsBuffer.push(row.data);
 
-                const percent = Math.min(100, (loadedRows / MAX_ROWS) * 100);
-                updateProgress(percent);
-
-                if (loadedRows >= MAX_ROWS) {
-                    completedManually = true;
-                    updateProgress(100, "Data loaded! Calculating network...");
-                    parser.abort();
-                    setTimeout(() => {
-                        try {
-                            buildGraph(rowsBuffer);
-                        } catch (error) {
-                            console.error("Fehler in buildGraph:", error);
-                            showError("Error creating visualization: " + error.message);
-                        }
-                    }, 100);
+                // Update progress every 1000 rows for performance
+                if (loadedRows % 1000 === 0) {
+                    updateProgress(50, `Loading data… ${loadedRows} rows`);
                 }
             },
 
@@ -394,22 +380,20 @@
                     return;
                 }
 
-                if (!completedManually) {
-                    if (rowsBuffer.length === 0) {
-                        showError("No data loaded. Check CSV file path.");
-                        return;
-                    }
-
-                    updateProgress(100, "Data loaded! Calculating network...");
-                    setTimeout(() => {
-                        try {
-                    buildGraph(rowsBuffer);
-                        } catch (error) {
-                            console.error("Fehler in buildGraph:", error);
-                            showError("Error creating visualization: " + error.message);
-                        }
-                    }, 100);
+                if (rowsBuffer.length === 0) {
+                    showError("No data loaded. Check CSV file path.");
+                    return;
                 }
+
+                updateProgress(100, `Data loaded! ${rowsBuffer.length} rows. Calculating network...`);
+                setTimeout(() => {
+                    try {
+                        buildGraph(rowsBuffer);
+                    } catch (error) {
+                        console.error("Error in buildGraph:", error);
+                        showError("Error creating visualization: " + error.message);
+                    }
+                }, 100);
             },
 
             error: function(error) {
