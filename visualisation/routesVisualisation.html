@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="data:,">
+    <meta charset="UTF-8">
+    <title>Route Network - Top Airports</title>
+
+    <!-- Cytoscape Core -->
+    <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+
+    <!-- PapaParse CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f5f5f5;
+            overflow: hidden;
+        }
+
+        #cy {
+            width: 100%;
+            height: 100vh;
+            display: none;
+            background: #ffffff;
+        }
+
+        #loading-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            z-index: 2000;
+        }
+
+        #progress-container {
+            width: 100%;
+            height: 32px;
+            border: 2px solid #333;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #0077ff, #33bbff, #66ddff);
+            transition: width 0.2s ease-out;
+            border-radius: 14px;
+        }
+
+        #progress-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        #hint {
+            font-size: 14px;
+            color: #666;
+            margin-top: 12px;
+        }
+
+        #legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 1000;
+            max-width: 380px;
+            max-height: 85vh;
+            overflow-y: auto;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        #legend.show {
+            display: block;
+        }
+
+        #legend h3 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            color: #333;
+            border-bottom: 3px solid #0077ff;
+            padding-bottom: 10px;
+        }
+
+        #legend .legend-item {
+            margin-bottom: 15px;
+        }
+
+        #legend .legend-item:last-child {
+            margin-bottom: 0;
+        }
+
+        #legend .legend-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        #legend .legend-content {
+            color: #555;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        #legend .edge-example {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0;
+        }
+
+        #legend .edge-line {
+            height: 4px;
+            background: linear-gradient(to right, rgb(55, 100, 255), rgb(200, 100, 155));
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        #legend .edge-line.thin {
+            width: 35px;
+        }
+
+        #legend .edge-line.medium {
+            width: 55px;
+        }
+
+        #legend .edge-line.thick {
+            width: 75px;
+        }
+
+        #legend .reset-btn,
+        #legend .layout-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #0077ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        #legend .reset-btn:hover,
+        #legend .layout-btn:hover {
+            background: #0055cc;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,119,255,0.3);
+        }
+
+        #legend .reset-btn:active,
+        #legend .layout-btn:active {
+            background: #003399;
+            transform: translateY(0);
+        }
+
+        #legend .layout-btn {
+            background: #28a745;
+        }
+
+        #legend .layout-btn:hover {
+            background: #218838;
+        }
+
+        #legend .layout-btn:active {
+            background: #1e7e34;
+        }
+
+        #legend .layout-select {
+            margin-top: 10px;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 12px;
+            width: 100%;
+            background: white;
+            cursor: pointer;
+        }
+
+        #legend .layout-select:focus {
+            outline: none;
+            border-color: #0077ff;
+        }
+
+        #info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            max-width: 300px;
+            z-index: 1000;
+        }
+
+        #info.show {
+            display: block;
+        }
+
+        #info strong {
+            color: #0077ff;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        #info em {
+            color: #888;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="loading-container">
+    <div id="progress-text">Loading data… 0%</div>
+<div id="progress-container">
+    <div id="progress-bar"></div>
+</div>
+    <div id="hint">Analyzing routes and calculating network...</div>
+</div>
+
+<div id="cy"></div>
+
+<div id="legend">
+    <h3>Legend</h3>
+    
+    <div class="legend-item">
+        <div class="legend-title">Airports (Nodes)</div>
+        <div class="legend-content">
+            Top <strong><span id="legend-airport-count">60</span> airports</strong> selected by route count. <strong>Larger circles = more connections.</strong>
+        </div>
+    </div>
+
+    <div class="legend-item">
+        <div class="legend-title">Routes (Edges)</div>
+        <div class="legend-content">
+            <strong>Line thickness</strong> shows route frequency:
+            <div class="edge-example">
+                <div class="edge-line thin"></div>
+                <span>Few flights</span>
+            </div>
+            <div class="edge-example">
+                <div class="edge-line medium"></div>
+                <span>Medium</span>
+            </div>
+            <div class="edge-example">
+                <div class="edge-line thick"></div>
+                <span>Many flights</span>
+            </div>
+            Only routes with <strong>≥2 connections</strong> shown.
+        </div>
+    </div>
+
+    <div class="legend-item">
+        <div class="legend-title">Values</div>
+        <div class="legend-content">
+            <strong>Connections:</strong> Total routes in raw data.<br>
+            <strong>Neighbors:</strong> Connected top airports (≥2 connections).
+        </div>
+    </div>
+
+    <div class="legend-item">
+        <div class="legend-title">Interaction</div>
+        <div class="legend-content">
+            <strong>Click airport</strong> to show only its routes. Click again to reset.
+        </div>
+    </div>
+
+    <div class="legend-item">
+        <div class="legend-title">Layout</div>
+        <div class="legend-content">
+            <select id="layout-select" class="layout-select">
+                <option value="breadthfirst">Breadthfirst</option>
+                <option value="circle">Circle</option>
+                <option value="grid">Grid</option>
+                <option value="concentric">Concentric</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="layout-btn" id="rearrange-btn">Rearrange Airports</button>
+    <button class="reset-btn" id="reset-view">Reset View</button>
+</div>
+
+<div id="info">
+    <strong>Route Network Visualization</strong>
+    <span id="info-text">Click an airport to focus its routes</span>
+</div>
+
+<script>
+    const csvPath = "../clean_data/routes.csv";
+    const MAX_ROWS = 2000;
+    const TOP_AIRPORTS = 60;
+    const MIN_ROUTE_WEIGHT = 2;
+
+    let cy;
+    let maxWeight = 1;
+    let maxFreq = 1;
+    let selectedNode = null;
+    let nodes = [];
+    let edges = [];
+    
+    // Globale Layout-Funktion
+    let applyLayout;
+
+    function updateProgress(percent, text) {
+        const percentClamped = Math.min(100, Math.max(0, percent));
+        document.getElementById("progress-bar").style.width = percentClamped + "%";
+        document.getElementById("progress-text").textContent = text || `Loading data… ${Math.floor(percentClamped)}%`;
+    }
+
+    function showError(message) {
+        document.getElementById("progress-text").textContent = "Error: " + message;
+        document.getElementById("progress-text").style.color = "#d32f2f";
+        document.getElementById("hint").innerHTML = 
+            "<br><strong>Solution:</strong><br>" +
+            "Open via local web server:<br>" +
+            "<code>python3 -m http.server 8000</code><br>" +
+            "Then open: <code>http://localhost:8000/visualisation/routesVisualisation.html</code>";
+    }
+
+    function loadWithProgress() {
+        let loadedRows = 0;
+        let rowsBuffer = [];
+        let completedManually = false;
+
+        updateProgress(0, "Starting data load...");
+
+        Papa.parse(csvPath, {
+            download: true,
+            header: true,
+            dynamicTyping: false,
+            skipEmptyLines: true,
+            fastMode: true,
+
+            step: function(row, parser) {
+                if (row.errors && row.errors.length > 0) {
+                    console.warn("Parse warning:", row.errors);
+                }
+                
+                if (!row.data) return;
+                
+                loadedRows++;
+                rowsBuffer.push(row.data);
+
+                const percent = Math.min(100, (loadedRows / MAX_ROWS) * 100);
+                updateProgress(percent);
+
+                if (loadedRows >= MAX_ROWS) {
+                    completedManually = true;
+                    updateProgress(100, "Data loaded! Calculating network...");
+                    parser.abort();
+                    setTimeout(() => {
+                        try {
+                            buildGraph(rowsBuffer);
+                        } catch (error) {
+                            console.error("Fehler in buildGraph:", error);
+                            showError("Error creating visualization: " + error.message);
+                        }
+                    }, 100);
+                }
+            },
+
+            complete: function(results) {
+                if (results.errors && results.errors.length > 0) {
+                    console.error("CSV Parse Errors:", results.errors);
+                    showError("Error parsing CSV file");
+                    return;
+                }
+
+                if (!completedManually) {
+                    if (rowsBuffer.length === 0) {
+                        showError("No data loaded. Check CSV file path.");
+                        return;
+                    }
+
+                    updateProgress(100, "Data loaded! Calculating network...");
+                    setTimeout(() => {
+                        try {
+                    buildGraph(rowsBuffer);
+                        } catch (error) {
+                            console.error("Fehler in buildGraph:", error);
+                            showError("Error creating visualization: " + error.message);
+                        }
+                    }, 100);
+                }
+            },
+
+            error: function(error) {
+                console.error("CSV Load Error:", error);
+                showError("Error loading CSV file. CORS issue?");
+            }
+        });
+    }
+
+    function buildGraph(routesRaw) {
+        document.getElementById("loading-container").style.display = "block";
+        document.getElementById("cy").style.display = "block";
+        document.getElementById("info").classList.add("show");
+
+        updateProgress(10, "Analyzing airports (1/4)...");
+
+        // Step 1: Calculate airport frequency
+        const frequency = {};
+        const routeCounts = {};
+
+        routesRaw.forEach(r => {
+            const src = r["Source airport"]?.trim();
+            const dst = r["Destination airport"]?.trim();
+            
+            if (!src || !dst || src === dst) return;
+
+            frequency[src] = (frequency[src] || 0) + 1;
+            frequency[dst] = (frequency[dst] || 0) + 1;
+
+            const routeKey = src < dst ? `${src}_${dst}` : `${dst}_${src}`;
+            routeCounts[routeKey] = (routeCounts[routeKey] || 0) + 1;
+        });
+
+        updateProgress(40, "Selecting top airports (2/4)...");
+
+        // Step 2: Select top airports
+        const topAirports = Object.entries(frequency)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, TOP_AIRPORTS)
+            .map(([iata]) => iata);
+
+        const topSet = new Set(topAirports);
+
+        updateProgress(60, "Filtering routes (3/4)...");
+
+        // Step 3: Filter routes
+        const edgeMap = {};
+
+        Object.entries(routeCounts).forEach(([key, count]) => {
+            if (count < MIN_ROUTE_WEIGHT) return;
+            
+            const [src, dst] = key.split('_');
+            if (topSet.has(src) && topSet.has(dst)) {
+            if (!edgeMap[key]) {
+                    edgeMap[key] = { source: src, target: dst, weight: count };
+                }
+            }
+        });
+
+        updateProgress(80, "Creating visualization (4/4)...");
+
+        // Schritt 4: Knoten und Kanten erstellen
+        nodes = topAirports.map(iata => ({
+            data: { 
+                id: iata, 
+                label: iata, 
+                freq: frequency[iata] 
+            }
+        }));
+
+        edges = Object.values(edgeMap).map(e => ({
+            data: {
+                id: `${e.source}_${e.target}`,
+                source: e.source,
+                target: e.target,
+                weight: e.weight
+            }
+        }));
+
+        if (nodes.length === 0) {
+            showError("No airports found. Check data.");
+            return;
+        }
+
+        maxWeight = edges.length > 0 ? Math.max(...edges.map(e => e.data.weight), 1) : 1;
+        maxFreq = nodes.length > 0 ? Math.max(...nodes.map(n => n.data.freq), 1) : 1;
+
+        const widthScale = w => ((w / maxWeight) * 8 + 1);
+        const nodeSize = freq => ((freq / maxFreq) * 35 + 20);
+
+        const weightColor = w => {
+            const p = Math.min(1, w / maxWeight);
+            const red = Math.floor(200 * p + 55);
+            const blue = Math.floor(255 - 100 * p);
+            return `rgb(${red}, 100, ${blue})`;
+        };
+
+        updateProgress(85, "Initializing graph...");
+
+        // Cytoscape initialisieren
+        cy = cytoscape({
+            container: document.getElementById("cy"),
+            elements: [...nodes, ...edges],
+
+            style: [
+                {
+                    selector: "node",
+                    style: {
+                        "background-color": "#0077ff",
+                        "label": "data(label)",
+                        "color": "#ffffff",
+                        "font-size": 11,
+                        "font-weight": "bold",
+                        "text-outline-width": 2,
+                        "text-outline-color": "#0077ff",
+                        "width": ele => nodeSize(ele.data("freq")),
+                        "height": ele => nodeSize(ele.data("freq")),
+                        "shape": "ellipse",
+                        "cursor": "pointer"
+                    }
+                },
+                {
+                    selector: "edge",
+                    style: {
+                        "width": ele => widthScale(ele.data("weight")),
+                        "line-color": ele => weightColor(ele.data("weight")),
+                        "opacity": 0.6,
+                        "curve-style": "bezier"
+                    }
+                }
+            ],
+
+            minZoom: 0.1,
+            maxZoom: 3,
+            wheelSensitivity: 0.2
+        });
+
+        // Layout starten - verwende breadthfirst (immer verfügbar in Cytoscape)
+        // breadthfirst ist ein gutes Layout für Netzwerke und funktioniert immer
+        const layoutOptions = {
+            name: "breadthfirst",
+            directed: false,
+            spacingFactor: 1.8,
+            padding: 50
+        };
+
+        const layout = cy.layout(layoutOptions);
+
+        let layoutStarted = false;
+        
+        cy.once("layoutstart", () => {
+            layoutStarted = true;
+            updateProgress(90, "Calculating layout…");
+        });
+
+        cy.once("layoutstop", () => {
+            updateProgress(100, "Rendering complete!");
+
+            setTimeout(() => {
+                document.getElementById("loading-container").style.display = "none";
+                document.getElementById("legend").classList.add("show");
+                
+                // Event-Handler für Layout-Buttons direkt registrieren
+                setupLayoutButtons();
+                setupInteractivity();
+            }, 400);
+
+            cy.fit(50);
+        });
+
+        // Fallback für Layout
+        setTimeout(() => {
+            if (!layoutStarted) {
+                console.warn("Layout-Event nicht gefeuert, verwende Fallback");
+                updateProgress(100, "Rendering complete!");
+                setTimeout(() => {
+                    document.getElementById("loading-container").style.display = "none";
+                    document.getElementById("legend").classList.add("show");
+                    setupLayoutButtons();
+                    setupInteractivity();
+                    cy.fit(50);
+                }, 400);
+            }
+        }, 3000);
+
+        try {
+            layout.run();
+        } catch (error) {
+            console.error("Layout error:", error);
+            updateProgress(100, "Graph created");
+            setTimeout(() => {
+                document.getElementById("loading-container").style.display = "none";
+                document.getElementById("legend").classList.add("show");
+                setupLayoutButtons();
+                setupInteractivity();
+                cy.fit(50);
+            }, 400);
+        }
+
+        // Legende aktualisieren
+        document.getElementById("legend-airport-count").textContent = nodes.length;
+
+        // Info aktualisieren
+        document.getElementById("info-text").innerHTML = 
+            `${nodes.length} airports, ${edges.length} routes<br>` +
+            `<em>Click an airport to focus its routes</em>`;
+    }
+
+    applyLayout = function(layoutName) {
+        if (!cy) {
+            console.error("Cytoscape nicht initialisiert");
+            return;
+        }
+        
+        console.log("Wende Layout an:", layoutName);
+        
+        // Alle aktuellen Layouts stoppen
+        try {
+            cy.layouts().forEach(layout => {
+                if (layout && layout.running()) {
+                    layout.stop();
+                }
+            });
+        } catch (e) {
+            console.warn("Fehler beim Stoppen von Layouts:", e);
+        }
+
+        // Layout-Optionen basierend auf dem Namen
+        let layoutOptions;
+        
+        switch(layoutName) {
+            case 'circle':
+                layoutOptions = {
+                    name: 'circle',
+                    spacingFactor: 1.5,
+                    padding: 50
+                };
+                break;
+            case 'grid':
+                layoutOptions = {
+                    name: 'grid',
+                    rows: Math.ceil(Math.sqrt(nodes.length)),
+                    cols: Math.ceil(Math.sqrt(nodes.length)),
+                    spacingFactor: 1.5
+                };
+                break;
+            case 'concentric':
+                layoutOptions = {
+                    name: 'concentric',
+                    spacingFactor: 1.5,
+                    padding: 50
+                };
+                break;
+            case 'breadthfirst':
+            default:
+                layoutOptions = {
+                    name: 'breadthfirst',
+                    directed: false,
+                    spacingFactor: 1.8,
+                    padding: 50
+                };
+                break;
+        }
+
+        // Neues Layout anwenden
+        try {
+            const layout = cy.layout(layoutOptions);
+            layout.run();
+            
+            // Nach Layout-Fertigstellung zoomen
+            cy.one('layoutstop', () => {
+                cy.fit(50);
+            });
+            
+            console.log("Layout gestartet:", layoutName);
+        } catch (error) {
+            console.error("Fehler beim Anwenden des Layouts:", error);
+            alert("Error applying layout: " + error.message);
+        }
+    }
+
+    function setupLayoutButtons() {
+        // Layout-Button Event Listener
+        const rearrangeBtn = document.getElementById("rearrange-btn");
+        if (rearrangeBtn) {
+            const newBtn = rearrangeBtn.cloneNode(true);
+            rearrangeBtn.parentNode.replaceChild(newBtn, rearrangeBtn);
+            
+            newBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const selectedLayout = document.getElementById("layout-select").value;
+                console.log("Button geklickt, Layout:", selectedLayout);
+                if (applyLayout) {
+                    applyLayout(selectedLayout);
+                } else {
+                    console.error("applyLayout Funktion nicht verfügbar");
+                }
+            });
+        } else {
+            console.error("rearrange-btn nicht gefunden");
+        }
+
+        // Layout-Select Event Listener
+        const layoutSelect = document.getElementById("layout-select");
+        if (layoutSelect) {
+            const newSelect = layoutSelect.cloneNode(true);
+            layoutSelect.parentNode.replaceChild(newSelect, layoutSelect);
+            
+            newSelect.addEventListener("change", function(e) {
+                e.preventDefault();
+                console.log("Layout geändert zu:", this.value);
+                if (applyLayout) {
+                    applyLayout(this.value);
+                } else {
+                    console.error("applyLayout Funktion nicht verfügbar");
+                }
+            });
+        } else {
+            console.error("layout-select nicht gefunden");
+        }
+    }
+
+    function setupInteractivity() {
+        // Reset-Funktion
+        function resetView() {
+            selectedNode = null;
+            cy.elements().style('opacity', '');
+            document.getElementById("info-text").innerHTML = 
+                `${nodes.length} airports, ${edges.length} routes<br>` +
+                `<em>Click an airport to focus its routes</em>`;
+            cy.fit(50);
+        }
+
+        // Click-Handler für Knoten
+        cy.on('tap', 'node', function(evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            
+            const clickedNode = evt.target;
+            
+            // Wenn derselbe Knoten erneut geklickt wird, zurücksetzen
+            if (selectedNode && selectedNode.id() === clickedNode.id()) {
+                resetView();
+                return;
+            }
+
+            selectedNode = clickedNode;
+            
+            // Alle Elemente dimmen
+            cy.elements().style('opacity', 0.15);
+
+            // Ausgewählten Knoten hervorheben
+            clickedNode.style('opacity', 1);
+
+            // Verbundene Knoten und Kanten hervorheben
+            const connectedEdges = clickedNode.connectedEdges();
+            const connectedNodes = clickedNode.neighborhood('node');
+
+            connectedEdges.style('opacity', 0.9);
+            connectedNodes.style('opacity', 1);
+
+
+            const freq = clickedNode.data('freq');
+            const degree = clickedNode.degree();
+            
+            document.getElementById("info-text").innerHTML = 
+                `<strong>${clickedNode.data('label')}</strong><br>` +
+                `Connections: ${freq}<br>` +
+                `Neighbors: ${degree}<br>` +
+                `<em>Click again to reset</em>`;
+
+            // Auf ausgewählten Bereich zoomen
+            const elementsToFit = clickedNode.union(connectedNodes);
+            cy.fit(elementsToFit, 100);
+        });
+
+        // Hover-Handler für Knoten
+        cy.on('mouseover', 'node', function(evt) {
+            if (!selectedNode) {
+                const node = evt.target;
+                const freq = node.data('freq');
+                const degree = node.degree();
+                const connectedEdges = node.connectedEdges();
+                
+                let explanation = "";
+                if (degree === 0 && freq > 0) {
+                    explanation = "<br><em style='color: #d32f2f; font-size: 11px;'>No routes to other top airports visible</em>";
+                }
+                
+                document.getElementById("info-text").innerHTML = 
+                    `<strong>${node.data('label')}</strong><br>` +
+                    `Connections: ${freq}<br>` +
+                    `Neighbors: ${degree}${explanation}<br>` +
+                    `<em>Click to focus</em>`;
+            }
+        });
+
+        cy.on('mouseout', 'node', function() {
+            if (!selectedNode) {
+                document.getElementById("info-text").innerHTML = 
+                    `${nodes.length} airports, ${edges.length} routes<br>` +
+                    `<em>Click an airport to focus its routes</em>`;
+            }
+        });
+
+        // Reset-Button Event Listener
+        const resetBtn = document.getElementById("reset-view");
+        if (resetBtn) {
+            resetBtn.addEventListener("click", resetView);
+        }
+    }
+
+    // Start
+    loadWithProgress();
+</script>
+
+</body>
+</html>
