@@ -1,0 +1,1459 @@
+<!doctype html>
+<html>
+ <head>
+  <title>IntelliJ Markdown Preview</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none';
+script-src 'self';
+style-src 'unsafe-inline';
+img-src file: *;
+connect-src 'none';
+font-src * data: *;
+object-src 'none';
+media-src 'none';
+child-src 'none';">
+  <style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style>
+  <style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style>
+  <style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style>
+  <style id="MJX-SVG-styles">
+mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+  stroke-width: 3;
+}
+</style>
+  <style>/* Reworked by IntelliJ Team The MIT License (MIT) Copyright (c) JetBrains Adapted from https://github.com/sindresorhus/github-markdown-css The MIT License (MIT) Copyright (c) Sindre Sorhus &lt;sindresorhus@gmail.com&gt; (sindresorhus.com) Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */ @font-face { font-family: octicons-anchor; src: url(data:font/woff;charset=utf-8;base64,d09GRgABAAAAAAYcAA0AAAAACjQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABGRlRNAAABMAAAABwAAAAca8vGTk9TLzIAAAFMAAAARAAAAFZG1VHVY21hcAAAAZAAAAA+AAABQgAP9AdjdnQgAAAB0AAAAAQAAAAEACICiGdhc3AAAAHUAAAACAAAAAj//wADZ2x5ZgAAAdwAAADRAAABEKyikaNoZWFkAAACsAAAAC0AAAA2AtXoA2hoZWEAAALgAAAAHAAAACQHngNFaG10eAAAAvwAAAAQAAAAEAwAACJsb2NhAAADDAAAAAoAAAAKALIAVG1heHAAAAMYAAAAHwAAACABEAB2bmFtZQAAAzgAAALBAAAFu3I9x/Nwb3N0AAAF/AAAAB0AAAAvaoFvbwAAAAEAAAAAzBdyYwAAAADP2IQvAAAAAM/bz7t4nGNgZGFgnMDAysDB1Ml0hoGBoR9CM75mMGLkYGBgYmBlZsAKAtJcUxgcPsR8iGF2+O/AEMPsznAYKMwIkgMA5REMOXicY2BgYGaAYBkGRgYQsAHyGMF8FgYFIM0ChED+h5j//yEk/3KoSgZGNgYYk4GRCUgwMaACRoZhDwCs7QgGAAAAIgKIAAAAAf//AAJ4nHWMMQrCQBBF/0zWrCCIKUQsTDCL2EXMohYGSSmorScInsRGL2DOYJe0Ntp7BK+gJ1BxF1stZvjz/v8DRghQzEc4kIgKwiAppcA9LtzKLSkdNhKFY3HF4lK69ExKslx7Xa+vPRVS43G98vG1DnkDMIBUgFN0MDXflU8tbaZOUkXUH0+U27RoRpOIyCKjbMCVejwypzJJG4jIwb43rfl6wbwanocrJm9XFYfskuVC5K/TPyczNU7b84CXcbxks1Un6H6tLH9vf2LRnn8Ax7A5WQAAAHicY2BkYGAA4teL1+yI57f5ysDNwgAC529f0kOmWRiYVgEpDgYmEA8AUzEKsQAAAHicY2BkYGB2+O/AEMPCAAJAkpEBFbAAADgKAe0EAAAiAAAAAAQAAAAEAAAAAAAAKgAqACoAiAAAeJxjYGRgYGBhsGFgYgABEMkFhAwM/xn0QAIAD6YBhwB4nI1Ty07cMBS9QwKlQapQW3VXySvEqDCZGbGaHULiIQ1FKgjWMxknMfLEke2A+IJu+wntrt/QbVf9gG75jK577Lg8K1qQPCfnnnt8fX1NRC/pmjrk/zprC+8D7tBy9DHgBXoWfQ44Av8t4Bj4Z8CLtBL9CniJluPXASf0Lm4CXqFX8Q84dOLnMB17N4c7tBo1AS/Qi+hTwBH4rwHHwN8DXqQ30XXAS7QaLwSc0Gn8NuAVWou/gFmnjLrEaEh9GmDdDGgL3B4JsrRPDU2hTOiMSuJUIdKQQayiAth69r6akSSFqIJuA19TrzCIaY8sIoxyrNIrL//pw7A2iMygkX5vDj+G+kuoLdX4GlGK/8Lnlz6/h9MpmoO9rafrz7ILXEHHaAx95s9lsI7AHNMBWEZHULnfAXwG9/ZqdzLI08iuwRloXE8kfhXYAvE23+23DU3t626rbs8/8adv+9DWknsHp3E17oCf+Z48rvEQNZ78paYM38qfk3v/u3l3u3GXN2Dmvmvpf1Srwk3pB/VSsp512bA/GG5i2WJ7wu430yQ5K3nFGiOqgtmSB5pJVSizwaacmUZzZhXLlZTq8qGGFY2YcSkqbth6aW1tRmlaCFs2016m5qn36SbJrqosG4uMV4aP2PHBmB3tjtmgN2izkGQyLWprekbIntJFing32a5rKWCN/SdSoga45EJykyQ7asZvHQ8PTm6cslIpwyeyjbVltNikc2HTR7YKh9LBl9DADC0U/jLcBZDKrMhUBfQBvXRzLtFtjU9eNHKin0x5InTqb8lNpfKv1s1xHzTXRqgKzek/mb7nB8RZTCDhGEX3kK/8Q75AmUM/eLkfA+0Hi908Kx4eNsMgudg5GLdRD7a84npi+YxNr5i5KIbW5izXas7cHXIMAau1OueZhfj+cOcP3P8MNIWLyYOBuxL6DRylJ4cAAAB4nGNgYoAALjDJyIAOWMCiTIxMLDmZedkABtIBygAAAA==) format('woff'); } body { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; font-family: Helvetica, Arial, freesans, sans-serif; font-size: 14px; line-height: 1.6; word-wrap: break-word; margin: 0 2em; } strong { font-weight: bold; } img { border: 0; } input { color: inherit; font: inherit; margin: 0; line-height: normal; } html input[disabled] { cursor: default; } input[type="checkbox"] { box-sizing: border-box; padding: 0; } body * { box-sizing: border-box; } input { font: 13px/1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; } a { text-decoration: none; } a:hover, a:active { text-decoration: underline; } hr { height: 1px; padding: 0; margin: 20px 0; border: 0 none; } hr:before { display: table; content: ""; } hr:after { display: table; clear: both; content: ""; } blockquote { margin: 0; } ul, ol { padding: 0; margin-top: 0; margin-bottom: 0; } ol ol, ul ol { list-style-type: lower-roman; } ul ul ol, ul ol ol, ol ul ol, ol ol ol { list-style-type: lower-alpha; } dd { margin-left: 0; } .octicon { font: normal normal normal 16px/1 octicons-anchor; display: inline-block; text-decoration: none; text-rendering: auto; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } .octicon-link:before { content: '\f05c'; } .markdown-body &gt; *:first-child { margin-top: 0 !important; } .markdown-body &gt; *:last-child { margin-bottom: 0 !important; } .anchor { position: absolute; top: 0; left: 0; display: block; padding-right: 6px; padding-left: 30px; margin-left: -30px; } .anchor:focus { outline: none; } h1, h2, h3, h4, h5, h6 { position: relative; margin-top: 1em; margin-bottom: 16px; font-weight: bold; line-height: 1.4; } h1 .octicon-link, h2 .octicon-link, h3 .octicon-link, h4 .octicon-link, h5 .octicon-link, h6 .octicon-link { display: none; color: #000; vertical-align: middle; } h1:hover .anchor, h2:hover .anchor, h3:hover .anchor, h4:hover .anchor, h5:hover .anchor, h6:hover .anchor { padding-left: 8px; margin-left: -30px; text-decoration: none; } h1:hover .anchor .octicon-link, h2:hover .anchor .octicon-link, h3:hover .anchor .octicon-link, h4:hover .anchor .octicon-link, h5:hover .anchor .octicon-link, h6:hover .anchor .octicon-link { display: inline-block; } h1 { font-size: 2.2em; padding-top: 0.6em; } h1 .anchor { line-height: 1; } h2 { font-size: 1.8em; line-height: 1.2; padding-top: 0.6em; } h2 .anchor { line-height: 1.2; } h3 { font-size: 1.3em; line-height: 1; padding-top: 0.6em; } h3 .anchor { line-height: 1.2; } h4 { font-size: 1em; } h4 .anchor { line-height: 1.2; } h5 { font-size: 1em; } h5 .anchor { line-height: 1.1; } h6 { font-size: 1em; } h6 .anchor { line-height: 1.1; } p, blockquote, ul, ol, dl, table, pre { margin-top: 16px; margin-bottom: 16px; } pre.frontmatter-header { background-color: transparent; margin: 0; padding: 0; } ul, ol { padding-left: 2em; } ul ul, ul ol, ol ol, ol ul { margin-top: 0; margin-bottom: 0; } li &gt; p { margin-top: 0; margin-bottom: 0; } dl { padding: 0; } dl dt { padding: 0; margin-top: 16px; font-size: 1em; font-style: italic; font-weight: bold; } dl dd { padding: 0 16px; margin-bottom: 16px; } blockquote { padding: 10px 10px 10px 16px; border-left: 2px solid; border-radius: 0 3px 3px 0; } blockquote &gt; :first-child { margin-top: 0; } blockquote &gt; :last-child { margin-bottom: 0; } table { display: block; width: 100%; overflow: auto; word-break: normal; border-collapse: collapse; border-spacing: 0; font-size: 1em; } table th { font-weight: bold; } table th, table td { padding: 6px 13px; background: transparent; } table tr { border-top: 1px solid; } img { max-width: 100%; box-sizing: border-box; } code { font: 0.9em "JetBrains Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace; padding: 0.2em 0.4em; margin: 2px; border-radius: 3px; } pre &gt; code { padding: 0; margin: 0; font-size: 100%; word-break: normal; white-space: pre; background: transparent; border: 0; } .highlight { margin-bottom: 16px; } .highlight pre, pre { font: 0.85em "JetBrains Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace; padding: 16px; overflow: auto; line-height: 1.45; border-radius: 3px; } pre code { display: inline; max-width: initial; padding: 0; margin: 0; overflow: initial; line-height: inherit; word-wrap: normal; background-color: transparent; border: 0; } pre code:before, pre code:after { content: normal; } kbd { font: 0.9em "JetBrains Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace; padding: 0.2em 0.4em; margin: 2px; border-radius: 3px; } .task-list-item { list-style-type: none; } .task-list-item + .task-list-item { margin-top: 3px; } .task-list-item input { margin: 0 0.35em 0.25em -0.6em; vertical-align: middle; } :checked + .radio-label { z-index: 1; position: relative; } span.user-del { text-decoration: line-through; } ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-thumb { -webkit-border-radius: 10px; } ::-webkit-scrollbar-track:vertical { -webkit-box-shadow: -1px 0 0 #ededed; } ::-webkit-scrollbar-track { background-color: transparent; } ::-webkit-scrollbar { width: 6px; }</style>
+  <style>:root { --default-font-size: 13px; --scale: 1.0; } body { background-color: rgba(30, 31, 34, 255.0); font-size: var(--default-font-size) !important; transform: scale(var(--scale)) !important; transform-origin: 0 0; } body, p, blockquote, ul, ol, dl, table, pre, code, tr { color: rgba(188, 190, 196, 255.0); } a { color: rgba(107, 155, 250, 255.0); } table td, table th { border: 1px solid rgba(57, 59, 64, 255.0); } hr { background-color: rgba(57, 59, 64, 255.0); } kbd, tr { border: 1px solid rgba(57, 59, 64, 255.0); } h6 { color: rgba(111, 115, 122, 255.0); } blockquote { border-left: 2px solid rgba(107, 155, 250, 0.4); } blockquote, code, pre { background-color: rgba(212, 222, 231, 0.09803921568627451); } ::-webkit-scrollbar { width: 14px; height: 14px; background-color: rgba(0, 0, 0, 0); } ::-webkit-scrollbar-track { background-color: rgba(0, 0, 0, 0); } ::-webkit-scrollbar-track:hover { background-color: rgba(0, 0, 0, 0); } ::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.149020); border-radius: 7px; border-width: 3px; border-style: solid; border-color: rgba(0, 0, 0, 0); background-clip: padding-box; outline: 1px solid rgba(38, 38, 38, 0.349020); outline-offset: -3px; } ::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255, 255, 0.301961); border-radius: 7px; border-width: 3px; border-style: solid; border-color: rgba(0, 0, 0, 0); background-clip: padding-box; outline: 1px solid rgba(38, 38, 38, 0.549020); outline-offset: -3px; } ::-webkit-scrollbar-corner { background-color: rgba(0, 0, 0, 0); } ::-webkit-scrollbar-button { display:none; }</style>
+  <style>/* Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. */ .code-fence-highlighter-copy-button { display: flex; position: absolute; float: left; margin-left: -1em; margin-top: -1em; } .code-fence-highlighter-copy-button-icon { visibility: hidden; max-width: 1em; } .code-fence:hover .code-fence-highlighter-copy-button-icon { visibility: visible; /*noinspection CssUnknownTarget*/ content: url("copy-button-copy-icon.png"); } .code-fence:hover .code-fence-highlighter-copy-button:hover .code-fence-highlighter-copy-button-icon { /*noinspection CssUnknownTarget*/ content: url("copy-button-copy-icon-hovered.png"); cursor: pointer; } .code-fence-highlighter-copy-button .tooltiptext { visibility: hidden; width: 120px; background-color: rgba(85, 85, 85, 0.4); color: #fff; text-align: center; border-radius: 6px; padding: 2px 0; position: absolute; font-size: 10px; z-index: 1; top: -4px; left: 120%; opacity: 0; transition: opacity 0.3s; } .code-fence-highlighter-copy-button:hover .tooltiptext { visibility: visible; opacity: 1; }</style>
+  <style>/* Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. */ .run-icon &gt; img { max-width: 1em; vertical-align: text-top; margin-right: 0.3em; } .code-block { position: absolute; left: 1em; } .hidden { display: none; }</style>
+ </head>
+ <body>
+  <div md-src-pos="0..28804">
+   <h1 id="global-air-network-socio-economic-analysis" md-src-pos="0..44">Global Air Network Socio-Economic Analysis</h1>
+   <h2 id="project-overview" md-src-pos="46..65">Project Overview</h2>
+   <h2 id="this-project-aims-to-analyze-the-structure-of-the-global-air-transportation-network-by-integrating-it-with-country-level-economic-indicators-the-goal-is-to-move-beyond-simple-network-connectivity-to-explore-complex-analytical-questions-regarding-how-national-wealth-stability-and-air-travel-infrastructure-correlate" md-src-pos="67..398">This project aims to analyze the structure of the <strong md-src-pos="117..154">Global Air Transportation Network</strong> by integrating it with <strong md-src-pos="178..215">country-level economic indicators</strong>. The goal is to move beyond simple network connectivity to explore complex analytical questions regarding how national wealth, stability, and air travel infrastructure correlate.</h2>
+   <h2 id="setup-and-data-ingestion" md-src-pos="400..427">Setup and Data Ingestion</h2>
+   <p md-src-pos="429..644"><span md-src-pos="429..450">This project utilizes</span> <code md-src-pos="451..464">compose.yml</code> <span md-src-pos="465..510">to set up the necessary database environment.</span> <span md-src-pos="511..560">Data is then ingested into the database using the</span> <code md-src-pos="561..576">ingestion.sql</code> <span md-src-pos="577..584">script,</span> <span md-src-pos="585..644">which populates the tables with cleaned and processed data.</span></p>
+   <hr>
+   <h2 id="data-sources" md-src-pos="651..666">Data Sources</h2>
+   <p md-src-pos="668..883"><span md-src-pos="668..716">This project combines data from two main sources</span>: <span md-src-pos="718..771">one for aviation and one for country-level economics.</span> <span md-src-pos="772..787">After cleaning,</span> <span md-src-pos="788..824">the final datasets are stored in the</span> <code md-src-pos="825..837">clean_data</code> <span md-src-pos="838..845">folder,</span> <span md-src-pos="846..883">ready to be loaded into the database.</span></p>
+   <table md-src-pos="885..1485">
+    <thead>
+     <tr md-src-pos="885..936">
+      <th md-src-pos="886..894">Source</th>
+      <th md-src-pos="895..908">Description</th>
+      <th md-src-pos="909..929">Files &amp; Row Counts</th>
+      <th md-src-pos="930..935">URL</th>
+     </tr>
+    </thead>
+    <tbody>
+     <tr md-src-pos="967..1254">
+      <td md-src-pos="968..1016"><strong md-src-pos="969..1006">Global Air Transportation Network</strong> (Kaggle)</td>
+      <td md-src-pos="1017..1054">Core aviation data, valid for 2022.</td>
+      <td md-src-pos="1055..1149"><code md-src-pos="1056..1068">routes.csv</code> (67,661), <code md-src-pos="1079..1093">airports.csv</code> (7,697), <code md-src-pos="1103..1117">airlines.csv</code> (6,162), <code md-src-pos="1127..1142">airplanes.csv</code> (246)</td>
+      <td md-src-pos="1150..1253"><code md-src-pos="1151..1252">https://www.kaggle.com/datasets/thedevastator/global-air-transportation-network-mapping-the-wo/data</code></td>
+     </tr>
+     <tr class="intellij-row-even" md-src-pos="1255..1485">
+      <td md-src-pos="1256..1281"><strong md-src-pos="1257..1280">World Bank DataBank</strong></td>
+      <td md-src-pos="1282..1325">Economic and social data, valid for 2023.</td>
+      <td md-src-pos="1326..1413"><code md-src-pos="1327..1344">country_gdp.csv</code> (265 rows), covering GDP, political stability, and population size.</td>
+      <td md-src-pos="1414..1484"><code md-src-pos="1415..1483">https://databank.worldbank.org/source/world-development-indicators</code></td>
+     </tr>
+    </tbody>
+   </table>
+   <hr>
+   <h2 id="database-schema" md-src-pos="1492..1510">Database Schema</h2>
+   <p md-src-pos="1512..1639"><span md-src-pos="1512..1560">The database will consist of six primary tables.</span> <span md-src-pos="1561..1603">The linkages are defined by aviation codes</span> (<span md-src-pos="1605..1614">IATA/ICAO</span>) <span md-src-pos="1616..1639">and geographical names.</span></p>
+   <h3 id="core-aviation-tables-4" md-src-pos="1641..1669">Core Aviation Tables (4)</h3>
+   <table md-src-pos="1671..3829">
+    <thead>
+     <tr md-src-pos="1671..2010">
+      <th md-src-pos="1672..1684">Table Name</th>
+      <th md-src-pos="1685..1698">Description</th>
+      <th md-src-pos="1699..2009">Key Columns</th>
+     </tr>
+    </thead>
+    <tbody>
+     <tr md-src-pos="2338..2705">
+      <td md-src-pos="2339..2351"><code md-src-pos="2340..2350">airlines</code></td>
+      <td md-src-pos="2352..2393">Carrier details and operational status.</td>
+      <td md-src-pos="2394..2704"><code md-src-pos="2395..2407">Airline_ID</code> (PK), <code md-src-pos="2414..2420">Name</code>, <code md-src-pos="2422..2429">Alias</code>, <code md-src-pos="2431..2437">IATA</code>, <code md-src-pos="2439..2445">ICAO</code>, <code md-src-pos="2447..2457">Callsign</code>, <code md-src-pos="2459..2467">Active</code></td>
+     </tr>
+     <tr class="intellij-row-even" md-src-pos="2706..3075">
+      <td md-src-pos="2707..2720"><code md-src-pos="2708..2719">airplanes</code></td>
+      <td md-src-pos="2721..2763">Aircraft model and identification codes.</td>
+      <td md-src-pos="2764..3074"><code md-src-pos="2765..2771">IATA</code> (PK), <code md-src-pos="2778..2784">Name</code>, <code md-src-pos="2786..2792">ICAO</code></td>
+     </tr>
+     <tr md-src-pos="3076..3457">
+      <td md-src-pos="3077..3089"><code md-src-pos="3078..3088">airports</code></td>
+      <td md-src-pos="3090..3145">Geographic and infrastructure data for every airport.</td>
+      <td md-src-pos="3146..3456"><code md-src-pos="3147..3159">Airport_ID</code> (PK), <code md-src-pos="3166..3172">Name</code>, <code md-src-pos="3174..3180">City</code>, <code md-src-pos="3182..3191">Country</code>, <code md-src-pos="3193..3199">IATA</code>, <code md-src-pos="3201..3207">ICAO</code>, <code md-src-pos="3209..3219">Latitude</code>, <code md-src-pos="3221..3232">Longitude</code>, <code md-src-pos="3234..3244">Altitude</code>, <code md-src-pos="3246..3256">Timezone</code>, <code md-src-pos="3258..3263">DST</code>, <code md-src-pos="3265..3288">Tz_database_time_zone</code>, <code md-src-pos="3290..3296">Type</code>, <code md-src-pos="3298..3306">Source</code> (FK to <code md-src-pos="3314..3338">countries.Country_Name</code>)</td>
+     </tr>
+     <tr class="intellij-row-even" md-src-pos="3458..3829">
+      <td md-src-pos="3459..3469"><code md-src-pos="3460..3468">routes</code></td>
+      <td md-src-pos="3470..3517">Defined flight segments between two airports.</td>
+      <td md-src-pos="3518..3828"><code md-src-pos="3519..3530">Routes_ID</code> (PK), <code md-src-pos="3537..3546">Airline</code> (Name), <code md-src-pos="3555..3567">Airline_ID</code> (FK to <code md-src-pos="3575..3596">airlines.Airline_ID</code>), <code md-src-pos="3599..3615">Source_airport</code> (IATA/ICAO), <code md-src-pos="3629..3648">Source_airport_ID</code> (FK to <code md-src-pos="3656..3677">airports.Airport_ID</code>), <code md-src-pos="3680..3701">Destination_airport</code> (IATA/ICAO), <code md-src-pos="3715..3739">Destination_airport_ID</code> (FK to <code md-src-pos="3747..3768">airports.Airport_ID</code>), <code md-src-pos="3771..3782">Codeshare</code>, <code md-src-pos="3784..3791">Stops</code>, <code md-src-pos="3793..3804">Equipment</code> (FK to airplanes.IATA)</td>
+     </tr>
+    </tbody>
+   </table>
+   <h3 id="enrichment-tables-1" md-src-pos="3831..3856">Enrichment Tables (1)</h3>
+   <p md-src-pos="3858..3920"><span md-src-pos="3858..3920">This table introduces the socio-economic context for analysis.</span></p>
+   <table md-src-pos="3922..4350">
+    <thead>
+     <tr md-src-pos="3922..4023">
+      <th md-src-pos="3923..3935">Table Name</th>
+      <th md-src-pos="3936..3944">Source</th>
+      <th md-src-pos="3945..3958">Key Columns</th>
+      <th md-src-pos="3959..4022">Linkage to <code md-src-pos="3971..3981">airports</code></th>
+     </tr>
+    </thead>
+    <tbody>
+     <tr md-src-pos="4111..4350">
+      <td md-src-pos="4112..4125"><code md-src-pos="4113..4124">countries</code></td>
+      <td md-src-pos="4126..4138">World Bank</td>
+      <td md-src-pos="4139..4285"><strong md-src-pos="4140..4158"><code md-src-pos="4142..4156">Country_Name</code></strong> (PK), <code md-src-pos="4165..4171">Time</code>, <code md-src-pos="4173..4184">Time_Code</code>, <code md-src-pos="4186..4200">Country_Code</code>, <code md-src-pos="4202..4218">GDP_current_US</code>, <code md-src-pos="4220..4247">GDP_per_capita_current_US</code>, <code md-src-pos="4249..4270">Political_Stability</code>, <code md-src-pos="4272..4284">Population</code></td>
+      <td md-src-pos="4286..4349"><code md-src-pos="4287..4305">airports.Country</code> <span class="math" inline="true" md-src-pos="4306..4323"><mjx-container class="MathJax CtxtMenu_Attached_0" jax="SVG" tabindex="0" ctxtmenu_counter="0" style="position: relative;">
+         <svg xmlns="http://www.w3.org/2000/svg" width="2.262ex" height="1.181ex" role="img" focusable="false" viewBox="0 -511 1000 522" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.025ex;">
+          <defs>
+           <path id="MJX-1-TEX-N-2194" d="M263 479Q267 501 271 506T288 511Q308 511 308 500Q308 493 303 475Q293 438 278 406T246 352T215 315T185 287T165 270H835Q729 349 696 475Q691 493 691 500Q691 511 711 511Q720 511 723 510T729 506T732 497T735 481T743 456Q765 389 816 336T935 261Q944 258 944 250Q944 244 939 241T915 231T877 212Q836 186 806 152T761 85T740 35T732 4Q730 -6 727 -8T711 -11Q691 -11 691 0Q691 7 696 25Q728 151 835 230H165Q167 228 182 216T211 189T244 152T277 96T303 25Q308 7 308 0Q308 -11 288 -11Q281 -11 278 -11T272 -7T267 2T263 21Q245 94 195 151T73 236Q58 242 55 247Q55 254 59 257T73 264Q144 292 194 349T263 479Z"></path>
+          </defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)">
+           <g data-mml-node="math">
+            <g data-mml-node="mo">
+             <use data-c="2194" xlink:href="#MJX-1-TEX-N-2194"></use>
+            </g>
+           </g>
+          </g>
+         </svg>
+         <mjx-assistive-mml unselectable="on" display="inline">
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+           <mo stretchy="false">↔</mo>
+          </math>
+         </mjx-assistive-mml>
+        </mjx-container></span> <code md-src-pos="4324..4348">countries.Country_Name</code></td>
+     </tr>
+    </tbody>
+   </table>
+   <hr>
+   <h2 id="data-cleaning" md-src-pos="4357..4373">Data Cleaning</h2>
+   <p md-src-pos="4375..4453"><span md-src-pos="4375..4410">To get the data ready for analysis,</span> <span md-src-pos="4411..4452">we performed the following cleaning steps</span>:</p>
+   <h3 id="1-standardizing-values" md-src-pos="4455..4482">1. Standardizing Values</h3>
+   <ul md-src-pos="4483..4855">
+    <li md-src-pos="4483..4630"><strong md-src-pos="4485..4507">Fixing Null Values</strong>: The source files used different ways to show null values (like <code md-src-pos="4572..4576">\N</code> or <code md-src-pos="4580..4588">&lt;null&gt;</code>). We standardized these to be consistent.</li>
+    <li md-src-pos="4631..4771"><strong md-src-pos="4633..4659">Standardizing Booleans</strong>: We changed fields like <code md-src-pos="4684..4695">Codeshare</code> to use a simple <code md-src-pos="4712..4715">1</code> (for true) or <code md-src-pos="4730..4733">0</code> (for false) instead of text like 'Y'.</li>
+    <li md-src-pos="4772..4855"><strong md-src-pos="4774..4794">Cleaning Up Text</strong>: We removed extra spaces and empty strings from text fields.</li>
+   </ul>
+   <h3 id="2-ensuring-data-integrity" md-src-pos="4857..4887">2. Ensuring Data Integrity</h3>
+   <ul md-src-pos="4888..5397">
+    <li md-src-pos="4888..5014"><strong md-src-pos="4890..4915">Handling Primary Keys</strong>: We made sure every row in a table had a primary key. If a row was missing its key, we removed it.</li>
+    <li md-src-pos="5015..5103"><strong md-src-pos="5017..5040">Removing Duplicates</strong>: We deleted any rows that were exact duplicates of each other.</li>
+    <li md-src-pos="5104..5281"><strong md-src-pos="5106..5135">Removing Conflicting Rows</strong>: In some cases, the same primary key was used for different rows. We removed these conflicting entries, as they likely represented outdated data.</li>
+    <li md-src-pos="5282..5397"><strong md-src-pos="5284..5312">Removing Incomplete Rows</strong>: We got rid of rows that were mostly empty because they weren't useful for analysis.</li>
+   </ul>
+   <h3 id="3-combining-and-validating-datasets" md-src-pos="5399..5439">3. Combining and Validating Datasets</h3>
+   <ul md-src-pos="5440..6285">
+    <li md-src-pos="5440..6127">
+     <p md-src-pos="5442..5582"><strong md-src-pos="5442..5468">Matching Country Names</strong>: The country names in the aviation and economic datasets didn't always match (e.g., "Bahamas" vs "Bahamas, The").</p>
+     <p md-src-pos="5586..5637"><span md-src-pos="5586..5598">For example,</span> <span md-src-pos="5599..5636">some country name mismatches we found</span>:</p>
+     <table md-src-pos="5641..5858">
+      <thead>
+       <tr md-src-pos="5641..5682">
+        <th md-src-pos="5642..5661">World Bank Name</th>
+        <th md-src-pos="5662..5681">Kaggle Name</th>
+       </tr>
+      </thead>
+      <tbody>
+       <tr md-src-pos="5729..5770">
+        <td md-src-pos="5730..5749">"Bahamas, The"</td>
+        <td md-src-pos="5750..5769">"Bahamas"</td>
+       </tr>
+       <tr class="intellij-row-even" md-src-pos="5773..5814">
+        <td md-src-pos="5774..5793">"North Macedonia"</td>
+        <td md-src-pos="5794..5813">"Macedonia"</td>
+       </tr>
+       <tr md-src-pos="5817..5858">
+        <td md-src-pos="5818..5837">"Myanmar"</td>
+        <td md-src-pos="5838..5857">"Burma"</td>
+       </tr>
+      </tbody>
+     </table>
+     <ul md-src-pos="5861..6127">
+      <li md-src-pos="5861..5965">We used a fuzzy-matching script (<code md-src-pos="5896..5907">rapidfuzz</code>) to automatically match names that were over 90% similar.</li>
+      <li md-src-pos="5968..6034">We manually fixed the rest of the names that didn't get matched.</li>
+      <li md-src-pos="6037..6127">Finally, we only kept economic data for countries that were present in our airport data.</li>
+     </ul></li>
+    <li md-src-pos="6128..6285">
+     <p md-src-pos="6130..6285"><strong md-src-pos="6130..6151">Validating Routes</strong>: We checked that every flight route correctly linked to an existing airline and airport. If a route had an invalid ID, we removed it.</p></li>
+   </ul>
+   <hr>
+   <h1 id="documentation-of-question-design-adjustments-and-results" md-src-pos="6292..6352">Documentation of Question Design, Adjustments, and Results</h1>
+   <h2 id="database-connection-setup" md-src-pos="6354..6383">Database Connection Setup</h2>
+   <p md-src-pos="6385..6537"><span md-src-pos="6385..6450">All analytical SQL queries were executed from a Jupyter Notebook,</span> <span md-src-pos="6451..6501">using a PostgreSQL database running inside Docker.</span> <span md-src-pos="6502..6536">After starting the environment via</span>:</p>
+   <pre class="code-fence" md-src-pos="6539..6567"><div class="code-fence-highlighter-copy-button" data-fence-content="ZG9ja2VyIGNvbXBvc2UgdXAgLWQ=">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code md-src-pos="6539..6567"><span md-src-pos="6539..6543"></span><span md-src-pos="6543..6564">docker compose up -d
+</span><span md-src-pos="6564..6567"></span></code></pre>
+   <p md-src-pos="6569..6612"><span md-src-pos="6569..6611">the PostgreSQL server becomes available at</span>:</p>
+   <ul md-src-pos="6614..6733">
+    <li md-src-pos="6614..6637"><strong md-src-pos="6616..6625">Host:</strong> <code md-src-pos="6626..6637">localhost</code></li>
+    <li md-src-pos="6638..6656"><strong md-src-pos="6640..6649">Port:</strong> <code md-src-pos="6650..6656">5432</code></li>
+    <li md-src-pos="6657..6679"><strong md-src-pos="6659..6668">User:</strong> <code md-src-pos="6669..6679">postgres</code></li>
+    <li md-src-pos="6680..6706"><strong md-src-pos="6682..6695">Password:</strong> <code md-src-pos="6696..6706">postgres</code></li>
+    <li md-src-pos="6707..6733"><strong md-src-pos="6709..6722">Database:</strong> <code md-src-pos="6723..6733">postgres</code></li>
+   </ul>
+   <p md-src-pos="6735..6780"><span md-src-pos="6735..6779">We connect to this database using SQLAlchemy</span>:</p>
+   <pre class="code-fence" md-src-pos="6782..6934"><div class="code-fence-highlighter-copy-button" data-fence-content="ZnJvbSBzcWxhbGNoZW15IGltcG9ydCBjcmVhdGVfZW5naW5lCmltcG9ydCBwYW5kYXMgYXMgcGQKCmVuZ2luZSA9IGNyZWF0ZV9lbmdpbmUoInBvc3RncmVzcWw6Ly9wb3N0Z3Jlczpwb3N0Z3Jlc0Bsb2NhbGhvc3Q6NTQzMi9wb3N0Z3JlcyIp">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code class="language-python" md-src-pos="6782..6934"><span md-src-pos="5129..5139"></span><span md-src-pos="5139..5143" style="color: rgb(207, 142, 109);">from</span><span md-src-pos="5143..5155"> sqlalchemy </span><span md-src-pos="5155..5161" style="color: rgb(207, 142, 109);">import</span><span md-src-pos="5161..5176"> create_engine
+</span><span md-src-pos="5176..5182" style="color: rgb(207, 142, 109);">import</span><span md-src-pos="5182..5190"> pandas </span><span md-src-pos="5190..5192" style="color: rgb(207, 142, 109);">as</span><span md-src-pos="5192..5196"> pd
+</span><span md-src-pos="5196..5197">
+</span><span md-src-pos="5197..5204">engine </span><span md-src-pos="5204..5205" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="5205..5219"> create_engine</span><span md-src-pos="5219..5220" style="color: rgb(188, 190, 196);">(</span><span md-src-pos="5220..5276" style="color: rgb(106, 171, 115);">"postgresql://postgres:postgres@localhost:5432/postgres"</span><span md-src-pos="5276..5277" style="color: rgb(188, 190, 196);">)</span><span md-src-pos="5277..5278">
+</span><span md-src-pos="5278..5281"></span></code></pre>
+   <p md-src-pos="6936..6967"><span md-src-pos="6936..6966">All queries are executed using</span>:</p>
+   <pre class="code-fence" md-src-pos="6969..7009"><div class="code-fence-highlighter-copy-button" data-fence-content="cGQucmVhZF9zcWwocXVlcnksIGVuZ2luZSk=">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code class="language-python" md-src-pos="6969..7009"><span md-src-pos="5316..5326"></span><span md-src-pos="5326..5328">pd</span><span md-src-pos="5328..5329" style="color: rgb(188, 190, 196);">.</span><span md-src-pos="5329..5337">read_sql</span><span md-src-pos="5337..5338" style="color: rgb(188, 190, 196);">(</span><span md-src-pos="5338..5343">query</span><span md-src-pos="5343..5344" style="color: rgb(188, 190, 196);">,</span><span md-src-pos="5344..5351"> engine</span><span md-src-pos="5351..5352" style="color: rgb(188, 190, 196);">)</span><span md-src-pos="5352..5353">
+</span><span md-src-pos="5353..5356"></span></code></pre>
+   <h2 id="question-1-basic-ra-select--projection" md-src-pos="7012..7057">Question 1 (Basic RA: Select + Projection)</h2>
+   <h3 id="which-airlines-are-inactive-provide-id-and-name" md-src-pos="7059..7112">Which airlines are inactive? Provide ID and name.</h3>
+   <pre class="code-fence" md-src-pos="7115..7280"><div class="code-fence-highlighter-copy-button" data-fence-content="cXVlcnlfcXVlc3Rpb24wMSA9ICIiIgpTRUxFQ1QgCiAgICAiQWlybGluZV9JRCIsCiAgICAiTmFtZSIKRlJPTSBhaXJsaW5lcwpXSEVSRSAiQWN0aXZlIiA9ICdOJzsKIiIiCnExX2RmID0gcGQucmVhZF9zcWwocXVlcnlfcXVlc3Rpb24wMSwgZW5naW5lKQpxMV9kZg==">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code class="language-python" md-src-pos="7115..7280"><span md-src-pos="5474..5484"></span><span md-src-pos="5484..5501">query_question01 </span><span md-src-pos="5501..5502" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="5502..5503"> </span><span md-src-pos="5503..5507" style="color: rgb(106, 171, 115);">"""
+</span><span md-src-pos="5507..5515" style="color: rgb(106, 171, 115);">SELECT 
+</span><span md-src-pos="5515..5533" style="color: rgb(106, 171, 115);">    "Airline_ID",
+</span><span md-src-pos="5533..5544" style="color: rgb(106, 171, 115);">    "Name"
+</span><span md-src-pos="5544..5558" style="color: rgb(106, 171, 115);">FROM airlines
+</span><span md-src-pos="5558..5580" style="color: rgb(106, 171, 115);">WHERE "Active" = 'N';
+</span><span md-src-pos="5580..5583" style="color: rgb(106, 171, 115);">"""</span><span md-src-pos="5583..5584">
+</span><span md-src-pos="5584..5590">q1_df </span><span md-src-pos="5590..5591" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="5591..5594"> pd</span><span md-src-pos="5594..5595" style="color: rgb(188, 190, 196);">.</span><span md-src-pos="5595..5603">read_sql</span><span md-src-pos="5603..5604" style="color: rgb(188, 190, 196);">(</span><span md-src-pos="5604..5620">query_question01</span><span md-src-pos="5620..5621" style="color: rgb(188, 190, 196);">,</span><span md-src-pos="5621..5628"> engine</span><span md-src-pos="5628..5629" style="color: rgb(188, 190, 196);">)</span><span md-src-pos="5629..5630">
+</span><span md-src-pos="5630..5636">q1_df
+</span><span md-src-pos="5636..5639"></span></code></pre>
+   <p md-src-pos="7282..7299"><strong md-src-pos="7282..7299">Query Result:</strong></p>
+   <div>
+    <table border="1" class="dataframe">
+     <thead>
+      <tr style="text-align: right;">
+       <th></th>
+       <th>Airline_ID</th>
+       <th>Name</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <th>0</th>
+       <td>2</td>
+       <td>135 Airways</td>
+      </tr>
+      <tr>
+       <th>1</th>
+       <td>4</td>
+       <td>2 Sqn No 1 Elementary Flying Training School</td>
+      </tr>
+      <tr>
+       <th>2</th>
+       <td>5</td>
+       <td>213 Flight Unit</td>
+      </tr>
+      <tr>
+       <th>3</th>
+       <td>6</td>
+       <td>223 Flight Unit State Airline</td>
+      </tr>
+      <tr>
+       <th>4</th>
+       <td>7</td>
+       <td>224th Flight Unit</td>
+      </tr>
+      <tr>
+       <th>...</th>
+       <td>...</td>
+       <td>...</td>
+      </tr>
+      <tr>
+       <th>4901</th>
+       <td>20963</td>
+       <td>Atlantic Air Cargo</td>
+      </tr>
+      <tr>
+       <th>4902</th>
+       <td>21056</td>
+       <td>Dummy</td>
+      </tr>
+      <tr>
+       <th>4903</th>
+       <td>21181</td>
+       <td>Air Andaman (2Y)</td>
+      </tr>
+      <tr>
+       <th>4904</th>
+       <td>21240</td>
+       <td>TDA Toa Domestic Airlines</td>
+      </tr>
+      <tr>
+       <th>4905</th>
+       <td>21251</td>
+       <td>Lynx Aviation (L3/SSX)</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>4906 rows × 2 columns</p>
+   </div>
+   <h2 id="relational-algebra-question-01" md-src-pos="8543..8576">Relational Algebra Question 01</h2>
+   <p md-src-pos="8578..8618"><img src="http://localhost:63342/markdownPreview/1813697937/Q1RA.jpeg" alt="Relational Algebra Diagram" __idea-generated="true" md-src-pos="8578..8618" data-original-src="Q1RA.jpeg"></p>
+   <h2 id="question-2-basic-ra-union" md-src-pos="8620..8651">Question 2 (Basic RA: Union)</h2>
+   <h3 id="show-all-airprts-located-in-either-germany-or-austria-include-name-city-and-country" md-src-pos="8653..8744">Show all airprts located in either Germany or Austria. Include name, city, and country.</h3>
+   <pre class="code-fence" md-src-pos="8747..9022"><div class="code-fence-highlighter-copy-button" data-fence-content="cXVlcnlfcXVlc3Rpb24wMiA9ICIiIgpTRUxFQ1QgCiAgICAiTmFtZSIsCiAgICAiQ2l0eSIsCiAgICAiQ291bnRyeSIKRlJPTSBhaXJwb3J0cwpXSEVSRSAiQ291bnRyeSIgPSAnR2VybWFueScKVU5JT04KU0VMRUNUIAogICAgIk5hbWUiLAogICAgIkNpdHkiLAogICAgIkNvdW50cnkiCkZST00gYWlycG9ydHMKV0hFUkUgIkNvdW50cnkiID0gJ0F1c3RyaWEnCiIiIgoKcTJfZGYgPSBwZC5yZWFkX3NxbChxdWVyeV9xdWVzdGlvbjAyLCBlbmdpbmUpCnEyX2Rm">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code class="language-python" md-src-pos="8747..9022"><span md-src-pos="7106..7116"></span><span md-src-pos="7116..7133">query_question02 </span><span md-src-pos="7133..7134" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="7134..7135"> </span><span md-src-pos="7135..7139" style="color: rgb(106, 171, 115);">"""
+</span><span md-src-pos="7139..7147" style="color: rgb(106, 171, 115);">SELECT 
+</span><span md-src-pos="7147..7159" style="color: rgb(106, 171, 115);">    "Name",
+</span><span md-src-pos="7159..7171" style="color: rgb(106, 171, 115);">    "City",
+</span><span md-src-pos="7171..7185" style="color: rgb(106, 171, 115);">    "Country"
+</span><span md-src-pos="7185..7199" style="color: rgb(106, 171, 115);">FROM airports
+</span><span md-src-pos="7199..7227" style="color: rgb(106, 171, 115);">WHERE "Country" = 'Germany'
+</span><span md-src-pos="7227..7233" style="color: rgb(106, 171, 115);">UNION
+</span><span md-src-pos="7233..7241" style="color: rgb(106, 171, 115);">SELECT 
+</span><span md-src-pos="7241..7253" style="color: rgb(106, 171, 115);">    "Name",
+</span><span md-src-pos="7253..7265" style="color: rgb(106, 171, 115);">    "City",
+</span><span md-src-pos="7265..7279" style="color: rgb(106, 171, 115);">    "Country"
+</span><span md-src-pos="7279..7293" style="color: rgb(106, 171, 115);">FROM airports
+</span><span md-src-pos="7293..7321" style="color: rgb(106, 171, 115);">WHERE "Country" = 'Austria'
+</span><span md-src-pos="7321..7324" style="color: rgb(106, 171, 115);">"""</span><span md-src-pos="7324..7325">
+</span><span md-src-pos="7325..7326">
+</span><span md-src-pos="7326..7332">q2_df </span><span md-src-pos="7332..7333" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="7333..7336"> pd</span><span md-src-pos="7336..7337" style="color: rgb(188, 190, 196);">.</span><span md-src-pos="7337..7345">read_sql</span><span md-src-pos="7345..7346" style="color: rgb(188, 190, 196);">(</span><span md-src-pos="7346..7362">query_question02</span><span md-src-pos="7362..7363" style="color: rgb(188, 190, 196);">,</span><span md-src-pos="7363..7370"> engine</span><span md-src-pos="7370..7371" style="color: rgb(188, 190, 196);">)</span><span md-src-pos="7371..7372">
+</span><span md-src-pos="7372..7378">q2_df
+</span><span md-src-pos="7378..7381"></span></code></pre>
+   <p md-src-pos="9024..9041"><strong md-src-pos="9024..9041">Query Result:</strong></p>
+   <div>
+    <table border="1" class="dataframe">
+     <thead>
+      <tr style="text-align: right;">
+       <th></th>
+       <th>Name</th>
+       <th>City</th>
+       <th>Country</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <th>0</th>
+       <td>Hamburg Airport</td>
+       <td>Hamburg</td>
+       <td>Germany</td>
+      </tr>
+      <tr>
+       <th>1</th>
+       <td>Geilenkirchen Air Base</td>
+       <td>Geilenkirchen</td>
+       <td>Germany</td>
+      </tr>
+      <tr>
+       <th>2</th>
+       <td>Vilshofen Airport</td>
+       <td>Vilshofen</td>
+       <td>Germany</td>
+      </tr>
+      <tr>
+       <th>3</th>
+       <td>St. Johann In Tirol Airport</td>
+       <td>St. Johann in Tirol</td>
+       <td>Austria</td>
+      </tr>
+      <tr>
+       <th>4</th>
+       <td>Wipperfürth-Neye Airport</td>
+       <td>Wipperfuerth</td>
+       <td>Germany</td>
+      </tr>
+      <tr>
+       <th>...</th>
+       <td>...</td>
+       <td>...</td>
+       <td>...</td>
+      </tr>
+      <tr>
+       <th>264</th>
+       <td>Hohn Air Base</td>
+       <td>Hohn</td>
+       <td>Germany</td>
+      </tr>
+      <tr>
+       <th>265</th>
+       <td>Rügen Airport</td>
+       <td>Ruegen</td>
+       <td>Germany</td>
+      </tr>
+      <tr>
+       <th>266</th>
+       <td>Torgau-Beilrode Airport</td>
+       <td>Gransee</td>
+       <td>Germany</td>
+      </tr>
+      <tr>
+       <th>267</th>
+       <td>Aalen-Heidenheim/Elchingen Airport</td>
+       <td>Aalen-heidenheim</td>
+       <td>Germany</td>
+      </tr>
+      <tr>
+       <th>268</th>
+       <td>Rothenburg/Görlitz Airport</td>
+       <td>Rothenburg/ol</td>
+       <td>Germany</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>269 rows × 3 columns</p>
+   </div>
+   <h2 id="relational-algebra-question-02" md-src-pos="10634..10667">Relational Algebra Question 02</h2>
+   <p md-src-pos="10669..10709"><img src="http://localhost:63342/markdownPreview/1813697937/Q2Ra.jpeg" alt="Relational Algebra Diagram" __idea-generated="true" md-src-pos="10669..10709" data-original-src="Q2Ra.jpeg"></p>
+   <h2 id="question-3-extended-ra-join" md-src-pos="10711..10744">Question 3 (Extended RA: Join)</h2>
+   <h3 id="show-all-routes-with-one-stop-with-the-name-of-the-airline-the-departure-and-arrival-airports-iata-codes" md-src-pos="10746..10858">Show all routes with one stop with the name of the airline, the departure and arrival airports (IATA codes).</h3>
+   <pre class="code-fence" md-src-pos="10860..11112"><div class="code-fence-highlighter-copy-button" data-fence-content="cXVlcnlfcXVlc3Rpb24wMyA9ICIiIgpTRUxFQ1QgCiAgICBhLiJOYW1lIiwKICAgIHIuIlNvdXJjZV9haXJwb3J0IiwKICAgIHIuIkRlc3RpbmF0aW9uX2FpcnBvcnQiCkZST00gcm91dGVzIHIKSk9JTiBhaXJsaW5lcyBhIE9OIHIuIkFpcmxpbmVfSUQiID0gYS4iQWlybGluZV9JRCIKV0hFUkUgci4iU3RvcHMiID0gMQoiIiIKCnEzX2RmID0gcGQucmVhZF9zcWwocXVlcnlfcXVlc3Rpb24wMywgZW5naW5lKQpxM19kZg==">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code class="language-python" md-src-pos="10860..11112"><span md-src-pos="9219..9229"></span><span md-src-pos="9229..9246">query_question03 </span><span md-src-pos="9246..9247" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="9247..9248"> </span><span md-src-pos="9248..9252" style="color: rgb(106, 171, 115);">"""
+</span><span md-src-pos="9252..9260" style="color: rgb(106, 171, 115);">SELECT 
+</span><span md-src-pos="9260..9274" style="color: rgb(106, 171, 115);">    a."Name",
+</span><span md-src-pos="9274..9298" style="color: rgb(106, 171, 115);">    r."Source_airport",
+</span><span md-src-pos="9298..9326" style="color: rgb(106, 171, 115);">    r."Destination_airport"
+</span><span md-src-pos="9326..9340" style="color: rgb(106, 171, 115);">FROM routes r
+</span><span md-src-pos="9340..9391" style="color: rgb(106, 171, 115);">JOIN airlines a ON r."Airline_ID" = a."Airline_ID"
+</span><span md-src-pos="9391..9411" style="color: rgb(106, 171, 115);">WHERE r."Stops" = 1
+</span><span md-src-pos="9411..9414" style="color: rgb(106, 171, 115);">"""</span><span md-src-pos="9414..9415">
+</span><span md-src-pos="9415..9416">
+</span><span md-src-pos="9416..9422">q3_df </span><span md-src-pos="9422..9423" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="9423..9426"> pd</span><span md-src-pos="9426..9427" style="color: rgb(188, 190, 196);">.</span><span md-src-pos="9427..9435">read_sql</span><span md-src-pos="9435..9436" style="color: rgb(188, 190, 196);">(</span><span md-src-pos="9436..9452">query_question03</span><span md-src-pos="9452..9453" style="color: rgb(188, 190, 196);">,</span><span md-src-pos="9453..9460"> engine</span><span md-src-pos="9460..9461" style="color: rgb(188, 190, 196);">)</span><span md-src-pos="9461..9462">
+</span><span md-src-pos="9462..9468">q3_df
+</span><span md-src-pos="9468..9471"></span></code></pre>
+   <p md-src-pos="11114..11131"><strong md-src-pos="11114..11131">Query Result:</strong></p>
+   <div>
+    <table border="1" class="dataframe">
+     <thead>
+      <tr style="text-align: right;">
+       <th></th>
+       <th>Name</th>
+       <th>Source_airport</th>
+       <th>Destination_airport</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <th>0</th>
+       <td>Canadian North</td>
+       <td>YRT</td>
+       <td>YEK</td>
+      </tr>
+      <tr>
+       <th>1</th>
+       <td>Air Canada</td>
+       <td>ABJ</td>
+       <td>BRU</td>
+      </tr>
+      <tr>
+       <th>2</th>
+       <td>Air Canada</td>
+       <td>YVR</td>
+       <td>YBL</td>
+      </tr>
+      <tr>
+       <th>3</th>
+       <td>Cubana de Aviación</td>
+       <td>FCO</td>
+       <td>HAV</td>
+      </tr>
+      <tr>
+       <th>4</th>
+       <td>AirTran Airways</td>
+       <td>HOU</td>
+       <td>SAT</td>
+      </tr>
+      <tr>
+       <th>5</th>
+       <td>AirTran Airways</td>
+       <td>MCO</td>
+       <td>ORF</td>
+      </tr>
+      <tr>
+       <th>6</th>
+       <td>Scandinavian Airlines System</td>
+       <td>ARN</td>
+       <td>GEV</td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <h2 id="relational-algebra-question-03" md-src-pos="12123..12156">Relational Algebra Question 03</h2>
+   <p md-src-pos="12158..12198"><img src="http://localhost:63342/markdownPreview/1813697937/Q3RA.jpeg" alt="Relational Algebra Diagram" __idea-generated="true" md-src-pos="12158..12198" data-original-src="Q3RA.jpeg"></p>
+   <p md-src-pos="12200..12241"><img src="http://localhost:63342/markdownPreview/1813697937/Q3RA2.jpeg" alt="Relational Algebra Diagram" __idea-generated="true" md-src-pos="12200..12241" data-original-src="Q3RA2.jpeg"></p>
+   <h2 id="question-4-extended-ra-aggregate-functions" md-src-pos="12243..12291">Question 4 (Extended RA: Aggregate Functions)</h2>
+   <h3 id="how-many-routes-does-each-airline-have" md-src-pos="12293..12336">How many routes does each airline have?</h3>
+   <pre class="code-fence" md-src-pos="12339..12586"><div class="code-fence-highlighter-copy-button" data-fence-content="cXVlcnlfcXVlc3Rpb24wNCA9ICIiIgpTRUxFQ1QgCiAgICBhLiJOYW1lIiwKICAgIENPVU5UKCopIEFTIFJvdXRlX0NvdW50CkZST00gcm91dGVzIHIKSk9JTiBhaXJsaW5lcyBhIE9OIHIuIkFpcmxpbmVfSUQiID0gYS4iQWlybGluZV9JRCIKR1JPVVAgQlkgYS4iTmFtZSIKSEFWSU5HIENPVU5UKCopID4gODA7CiIiIgpxNF9kZiA9IHBkLnJlYWRfc3FsKHF1ZXJ5X3F1ZXN0aW9uMDQsIGVuZ2luZSkKcTRfZGY=">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code class="language-python" md-src-pos="12339..12586"><span md-src-pos="10698..10708"></span><span md-src-pos="10708..10725">query_question04 </span><span md-src-pos="10725..10726" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="10726..10727"> </span><span md-src-pos="10727..10731" style="color: rgb(106, 171, 115);">"""
+</span><span md-src-pos="10731..10739" style="color: rgb(106, 171, 115);">SELECT 
+</span><span md-src-pos="10739..10753" style="color: rgb(106, 171, 115);">    a."Name",
+</span><span md-src-pos="10753..10781" style="color: rgb(106, 171, 115);">    COUNT(*) AS Route_Count
+</span><span md-src-pos="10781..10795" style="color: rgb(106, 171, 115);">FROM routes r
+</span><span md-src-pos="10795..10846" style="color: rgb(106, 171, 115);">JOIN airlines a ON r."Airline_ID" = a."Airline_ID"
+</span><span md-src-pos="10846..10864" style="color: rgb(106, 171, 115);">GROUP BY a."Name"
+</span><span md-src-pos="10864..10886" style="color: rgb(106, 171, 115);">HAVING COUNT(*) &gt; 80;
+</span><span md-src-pos="10886..10889" style="color: rgb(106, 171, 115);">"""</span><span md-src-pos="10889..10890">
+</span><span md-src-pos="10890..10896">q4_df </span><span md-src-pos="10896..10897" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="10897..10900"> pd</span><span md-src-pos="10900..10901" style="color: rgb(188, 190, 196);">.</span><span md-src-pos="10901..10909">read_sql</span><span md-src-pos="10909..10910" style="color: rgb(188, 190, 196);">(</span><span md-src-pos="10910..10926">query_question04</span><span md-src-pos="10926..10927" style="color: rgb(188, 190, 196);">,</span><span md-src-pos="10927..10934"> engine</span><span md-src-pos="10934..10935" style="color: rgb(188, 190, 196);">)</span><span md-src-pos="10935..10936">
+</span><span md-src-pos="10936..10942">q4_df
+</span><span md-src-pos="10942..10945"></span></code></pre>
+   <p md-src-pos="12588..12605"><strong md-src-pos="12588..12605">Query Result:</strong></p>
+   <div>
+    <table border="1" class="dataframe">
+     <thead>
+      <tr style="text-align: right;">
+       <th></th>
+       <th>Name</th>
+       <th>route_count</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <th>0</th>
+       <td>Air Bourbon</td>
+       <td>210</td>
+      </tr>
+      <tr>
+       <th>1</th>
+       <td>TransAsia Airways</td>
+       <td>92</td>
+      </tr>
+      <tr>
+       <th>2</th>
+       <td>Air India Limited</td>
+       <td>364</td>
+      </tr>
+      <tr>
+       <th>3</th>
+       <td>Meridiana</td>
+       <td>140</td>
+      </tr>
+      <tr>
+       <th>4</th>
+       <td>EVA Air</td>
+       <td>114</td>
+      </tr>
+      <tr>
+       <th>...</th>
+       <td>...</td>
+       <td>...</td>
+      </tr>
+      <tr>
+       <th>136</th>
+       <td>LOT Polish Airlines</td>
+       <td>114</td>
+      </tr>
+      <tr>
+       <th>137</th>
+       <td>Sriwijaya Air</td>
+       <td>106</td>
+      </tr>
+      <tr>
+       <th>138</th>
+       <td>LAN Airlines</td>
+       <td>285</td>
+      </tr>
+      <tr>
+       <th>139</th>
+       <td>Iberia Airlines</td>
+       <td>797</td>
+      </tr>
+      <tr>
+       <th>140</th>
+       <td>Philippine Airlines</td>
+       <td>144</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>141 rows × 2 columns</p>
+   </div>
+   <p md-src-pos="13781..13821"><img src="http://localhost:63342/markdownPreview/1813697937/Q4RA.jpeg" alt="Relational Algebra Diagram" __idea-generated="true" md-src-pos="13781..13821" data-original-src="Q4RA.jpeg"></p>
+   <h2 id="question-5-extended-ra-aggregate-functions" md-src-pos="13823..13871">Question 5 (Extended RA: Aggregate Functions)</h2>
+   <h3 id="which-countries-have-the-highest-percentage-of-domestic-routes" md-src-pos="13873..13940">Which countries have the highest percentage of domestic routes?</h3>
+   <pre class="code-fence" md-src-pos="13942..14946"><div class="code-fence-highlighter-copy-button" data-fence-content="cXVlcnlfcXVlc3Rpb24wNSA9ICIiIgpXSVRIIHJvdXRlX3dpdGhfY291bnRyaWVzIEFTICgKICAgIFNFTEVDVAogICAgICAgIHIuIlJvdXRlc19JRCIsCiAgICAgICAgc3JjX2MuIkNvdW50cnlfTmFtZSIgIEFTIHNyY19jb3VudHJ5LAogICAgICAgIGRlc3RfYy4iQ291bnRyeV9OYW1lIiBBUyBkZXN0X2NvdW50cnkKICAgIEZST00gcm91dGVzIHIKICAgIEpPSU4gYWlycG9ydHMgc3JjX2EgCiAgICAgICAgT04gci4iU291cmNlX2FpcnBvcnQiID0gc3JjX2EuIklBVEEiCiAgICBKT0lOIGNvdW50cmllcyBzcmNfYyAKICAgICAgICBPTiBzcmNfYS4iQ291bnRyeSIgPSBzcmNfYy4iQ291bnRyeV9OYW1lIgogICAgSk9JTiBhaXJwb3J0cyBkZXN0X2EgCiAgICAgICAgT04gci4iRGVzdGluYXRpb25fYWlycG9ydCIgPSBkZXN0X2EuIklBVEEiCiAgICBKT0lOIGNvdW50cmllcyBkZXN0X2MgCiAgICAgICAgT04gZGVzdF9hLiJDb3VudHJ5IiA9IGRlc3RfYy4iQ291bnRyeV9OYW1lIgopLApyb3V0ZV9zdGF0cyBBUyAoCiAgICBTRUxFQ1QKICAgICAgICBzcmNfY291bnRyeSBBUyBjb3VudHJ5LAogICAgICAgIENPVU5UKCopIEFTIHRvdGFsX3JvdXRlcywKICAgICAgICBDT1VOVCgqKSBGSUxURVIgKFdIRVJFIHNyY19jb3VudHJ5ID0gZGVzdF9jb3VudHJ5KSBBUyBkb21lc3RpY19yb3V0ZXMKICAgIEZST00gcm91dGVfd2l0aF9jb3VudHJpZXMKICAgIEdST1VQIEJZIHNyY19jb3VudHJ5CikKU0VMRUNUCiAgICBjb3VudHJ5LAogICAgdG90YWxfcm91dGVzLAogICAgZG9tZXN0aWNfcm91dGVzLAogICAgZG9tZXN0aWNfcm91dGVzOjpGTE9BVCAvIHRvdGFsX3JvdXRlcyBBUyBkb21lc3RpY19zaGFyZQpGUk9NIHJvdXRlX3N0YXRzCldIRVJFIHRvdGFsX3JvdXRlcyA+PSAxMDAKT1JERVIgQlkgZG9tZXN0aWNfc2hhcmUgREVTQwpMSU1JVCAxNTsKIiIiCgpxNV9kZiA9IHBkLnJlYWRfc3FsKHF1ZXJ5X3F1ZXN0aW9uMDUsIGVuZ2luZSkKcTVfZGY=">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code class="language-python" md-src-pos="13942..14946"><span md-src-pos="12301..12311"></span><span md-src-pos="12311..12328">query_question05 </span><span md-src-pos="12328..12329" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="12329..12330"> </span><span md-src-pos="12330..12334" style="color: rgb(106, 171, 115);">"""
+</span><span md-src-pos="12334..12365" style="color: rgb(106, 171, 115);">WITH route_with_countries AS (
+</span><span md-src-pos="12365..12376" style="color: rgb(106, 171, 115);">    SELECT
+</span><span md-src-pos="12376..12399" style="color: rgb(106, 171, 115);">        r."Routes_ID",
+</span><span md-src-pos="12399..12445" style="color: rgb(106, 171, 115);">        src_c."Country_Name"  AS src_country,
+</span><span md-src-pos="12445..12491" style="color: rgb(106, 171, 115);">        dest_c."Country_Name" AS dest_country
+</span><span md-src-pos="12491..12509" style="color: rgb(106, 171, 115);">    FROM routes r
+</span><span md-src-pos="12509..12534" style="color: rgb(106, 171, 115);">    JOIN airports src_a 
+</span><span md-src-pos="12534..12579" style="color: rgb(106, 171, 115);">        ON r."Source_airport" = src_a."IATA"
+</span><span md-src-pos="12579..12605" style="color: rgb(106, 171, 115);">    JOIN countries src_c 
+</span><span md-src-pos="12605..12655" style="color: rgb(106, 171, 115);">        ON src_a."Country" = src_c."Country_Name"
+</span><span md-src-pos="12655..12681" style="color: rgb(106, 171, 115);">    JOIN airports dest_a 
+</span><span md-src-pos="12681..12732" style="color: rgb(106, 171, 115);">        ON r."Destination_airport" = dest_a."IATA"
+</span><span md-src-pos="12732..12759" style="color: rgb(106, 171, 115);">    JOIN countries dest_c 
+</span><span md-src-pos="12759..12811" style="color: rgb(106, 171, 115);">        ON dest_a."Country" = dest_c."Country_Name"
+</span><span md-src-pos="12811..12814" style="color: rgb(106, 171, 115);">),
+</span><span md-src-pos="12814..12831" style="color: rgb(106, 171, 115);">route_stats AS (
+</span><span md-src-pos="12831..12842" style="color: rgb(106, 171, 115);">    SELECT
+</span><span md-src-pos="12842..12874" style="color: rgb(106, 171, 115);">        src_country AS country,
+</span><span md-src-pos="12874..12908" style="color: rgb(106, 171, 115);">        COUNT(*) AS total_routes,
+</span><span md-src-pos="12908..12986" style="color: rgb(106, 171, 115);">        COUNT(*) FILTER (WHERE src_country = dest_country) AS domestic_routes
+</span><span md-src-pos="12986..13016" style="color: rgb(106, 171, 115);">    FROM route_with_countries
+</span><span md-src-pos="13016..13041" style="color: rgb(106, 171, 115);">    GROUP BY src_country
+</span><span md-src-pos="13041..13043" style="color: rgb(106, 171, 115);">)
+</span><span md-src-pos="13043..13050" style="color: rgb(106, 171, 115);">SELECT
+</span><span md-src-pos="13050..13063" style="color: rgb(106, 171, 115);">    country,
+</span><span md-src-pos="13063..13081" style="color: rgb(106, 171, 115);">    total_routes,
+</span><span md-src-pos="13081..13102" style="color: rgb(106, 171, 115);">    domestic_routes,
+</span><span md-src-pos="13102..13162" style="color: rgb(106, 171, 115);">    domestic_routes::FLOAT / total_routes AS domestic_share
+</span><span md-src-pos="13162..13179" style="color: rgb(106, 171, 115);">FROM route_stats
+</span><span md-src-pos="13179..13205" style="color: rgb(106, 171, 115);">WHERE total_routes &gt;= 100
+</span><span md-src-pos="13205..13234" style="color: rgb(106, 171, 115);">ORDER BY domestic_share DESC
+</span><span md-src-pos="13234..13244" style="color: rgb(106, 171, 115);">LIMIT 15;
+</span><span md-src-pos="13244..13247" style="color: rgb(106, 171, 115);">"""</span><span md-src-pos="13247..13248">
+</span><span md-src-pos="13248..13249">
+</span><span md-src-pos="13249..13255">q5_df </span><span md-src-pos="13255..13256" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="13256..13259"> pd</span><span md-src-pos="13259..13260" style="color: rgb(188, 190, 196);">.</span><span md-src-pos="13260..13268">read_sql</span><span md-src-pos="13268..13269" style="color: rgb(188, 190, 196);">(</span><span md-src-pos="13269..13285">query_question05</span><span md-src-pos="13285..13286" style="color: rgb(188, 190, 196);">,</span><span md-src-pos="13286..13293"> engine</span><span md-src-pos="13293..13294" style="color: rgb(188, 190, 196);">)</span><span md-src-pos="13294..13295">
+</span><span md-src-pos="13295..13301">q5_df
+</span><span md-src-pos="13301..13302">
+</span><span md-src-pos="13302..13305"></span></code></pre>
+   <p md-src-pos="14948..14965"><strong md-src-pos="14948..14965">Query Result:</strong></p>
+   <div>
+    <table border="1" class="dataframe">
+     <thead>
+      <tr style="text-align: right;">
+       <th></th>
+       <th>country</th>
+       <th>total_routes</th>
+       <th>domestic_routes</th>
+       <th>domestic_share</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <th>0</th>
+       <td>China</td>
+       <td>7894</td>
+       <td>6743</td>
+       <td>0.854193</td>
+      </tr>
+      <tr>
+       <th>1</th>
+       <td>Brazil</td>
+       <td>1325</td>
+       <td>1129</td>
+       <td>0.852075</td>
+      </tr>
+      <tr>
+       <th>2</th>
+       <td>French Polynesia</td>
+       <td>108</td>
+       <td>91</td>
+       <td>0.842593</td>
+      </tr>
+      <tr>
+       <th>3</th>
+       <td>Indonesia</td>
+       <td>817</td>
+       <td>603</td>
+       <td>0.738066</td>
+      </tr>
+      <tr>
+       <th>4</th>
+       <td>Iran, Islamic Rep.</td>
+       <td>356</td>
+       <td>257</td>
+       <td>0.721910</td>
+      </tr>
+      <tr>
+       <th>5</th>
+       <td>United States</td>
+       <td>7508</td>
+       <td>5382</td>
+       <td>0.716835</td>
+      </tr>
+      <tr>
+       <th>6</th>
+       <td>India</td>
+       <td>1145</td>
+       <td>773</td>
+       <td>0.675109</td>
+      </tr>
+      <tr>
+       <th>7</th>
+       <td>Australia</td>
+       <td>836</td>
+       <td>557</td>
+       <td>0.666268</td>
+      </tr>
+      <tr>
+       <th>8</th>
+       <td>Argentina</td>
+       <td>253</td>
+       <td>166</td>
+       <td>0.656126</td>
+      </tr>
+      <tr>
+       <th>9</th>
+       <td>Colombia</td>
+       <td>337</td>
+       <td>219</td>
+       <td>0.649852</td>
+      </tr>
+      <tr>
+       <th>10</th>
+       <td>Chile</td>
+       <td>155</td>
+       <td>97</td>
+       <td>0.625806</td>
+      </tr>
+      <tr>
+       <th>11</th>
+       <td>Philippines</td>
+       <td>393</td>
+       <td>240</td>
+       <td>0.610687</td>
+      </tr>
+      <tr>
+       <th>12</th>
+       <td>New Zealand</td>
+       <td>188</td>
+       <td>114</td>
+       <td>0.606383</td>
+      </tr>
+      <tr>
+       <th>13</th>
+       <td>Venezuela, RB</td>
+       <td>145</td>
+       <td>81</td>
+       <td>0.558621</td>
+      </tr>
+      <tr>
+       <th>14</th>
+       <td>Norway</td>
+       <td>410</td>
+       <td>222</td>
+       <td>0.541463</td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <p md-src-pos="17107..17147"><img src="http://localhost:63342/markdownPreview/1813697937/Q5Ra.jpeg" alt="Relational Algebra Diagram" __idea-generated="true" md-src-pos="17107..17147" data-original-src="Q5Ra.jpeg"></p>
+   <h2 id="question-6-extended-ra-aggregate-functions" md-src-pos="17149..17197">Question 6 (Extended RA: Aggregate Functions)</h2>
+   <h3 id="which-aircraft-types-equipment-codes-appear-on-the-largest-number-of-distinct-routes" md-src-pos="17199..17289">Which aircraft types (Equipment codes) appear on the largest number of distinct routes</h3>
+   <pre class="code-fence" md-src-pos="17291..17737"><div class="code-fence-highlighter-copy-button" data-fence-content="cXVlcnlfcXVlc3Rpb24wNiA9ICIiIgpXSVRIIGV4cGFuZGVkX2VxdWlwbWVudCBBUyAoCiAgICBTRUxFQ1QKICAgICAgICByLiJSb3V0ZXNfSUQiLAogICAgICAgIHRyaW0oZXF1aXApIEFTIGVxdWlwbWVudAogICAgRlJPTSByb3V0ZXMgciwKICAgICAgICAgcmVnZXhwX3NwbGl0X3RvX3RhYmxlKHIuIkVxdWlwbWVudCIsICcgJykgQVMgZXF1aXAKICAgIFdIRVJFIHRyaW0oZXF1aXApIDw+ICcnCikKClNFTEVDVAogICAgZXF1aXBtZW50LAogICAgQ09VTlQoRElTVElOQ1QgIlJvdXRlc19JRCIpIEFTIHJvdXRlX2NvdW50CkZST00gZXhwYW5kZWRfZXF1aXBtZW50CkdST1VQIEJZIGVxdWlwbWVudApPUkRFUiBCWSByb3V0ZV9jb3VudCBERVNDCkxJTUlUIDEwOwoiIiIKcTZfZGYgPSBwZC5yZWFkX3NxbChxdWVyeV9xdWVzdGlvbjA2LCBlbmdpbmUpCnE2X2Rm">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code class="language-python" md-src-pos="17291..17737"><span md-src-pos="15650..15660"></span><span md-src-pos="15660..15677">query_question06 </span><span md-src-pos="15677..15678" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="15678..15679"> </span><span md-src-pos="15679..15683" style="color: rgb(106, 171, 115);">"""
+</span><span md-src-pos="15683..15712" style="color: rgb(106, 171, 115);">WITH expanded_equipment AS (
+</span><span md-src-pos="15712..15723" style="color: rgb(106, 171, 115);">    SELECT
+</span><span md-src-pos="15723..15746" style="color: rgb(106, 171, 115);">        r."Routes_ID",
+</span><span md-src-pos="15746..15779" style="color: rgb(106, 171, 115);">        trim(equip) AS equipment
+</span><span md-src-pos="15779..15798" style="color: rgb(106, 171, 115);">    FROM routes r,
+</span><span md-src-pos="15798..15858" style="color: rgb(106, 171, 115);">         regexp_split_to_table(r."Equipment", ' ') AS equip
+</span><span md-src-pos="15858..15886" style="color: rgb(106, 171, 115);">    WHERE trim(equip) &lt;&gt; ''
+</span><span md-src-pos="15886..15888" style="color: rgb(106, 171, 115);">)
+</span><span md-src-pos="15888..15889" style="color: rgb(106, 171, 115);">
+</span><span md-src-pos="15889..15896" style="color: rgb(106, 171, 115);">SELECT
+</span><span md-src-pos="15896..15911" style="color: rgb(106, 171, 115);">    equipment,
+</span><span md-src-pos="15911..15958" style="color: rgb(106, 171, 115);">    COUNT(DISTINCT "Routes_ID") AS route_count
+</span><span md-src-pos="15958..15982" style="color: rgb(106, 171, 115);">FROM expanded_equipment
+</span><span md-src-pos="15982..16001" style="color: rgb(106, 171, 115);">GROUP BY equipment
+</span><span md-src-pos="16001..16027" style="color: rgb(106, 171, 115);">ORDER BY route_count DESC
+</span><span md-src-pos="16027..16037" style="color: rgb(106, 171, 115);">LIMIT 10;
+</span><span md-src-pos="16037..16040" style="color: rgb(106, 171, 115);">"""</span><span md-src-pos="16040..16041">
+</span><span md-src-pos="16041..16047">q6_df </span><span md-src-pos="16047..16048" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="16048..16051"> pd</span><span md-src-pos="16051..16052" style="color: rgb(188, 190, 196);">.</span><span md-src-pos="16052..16060">read_sql</span><span md-src-pos="16060..16061" style="color: rgb(188, 190, 196);">(</span><span md-src-pos="16061..16077">query_question06</span><span md-src-pos="16077..16078" style="color: rgb(188, 190, 196);">,</span><span md-src-pos="16078..16085"> engine</span><span md-src-pos="16085..16086" style="color: rgb(188, 190, 196);">)</span><span md-src-pos="16086..16087">
+</span><span md-src-pos="16087..16093">q6_df
+</span><span md-src-pos="16093..16096"></span></code></pre>
+   <p md-src-pos="17739..17756"><strong md-src-pos="17739..17756">Query Result:</strong></p>
+   <div>
+    <table border="1" class="dataframe">
+     <thead>
+      <tr style="text-align: right;">
+       <th></th>
+       <th>equipment</th>
+       <th>route_count</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <th>0</th>
+       <td>320</td>
+       <td>14844</td>
+      </tr>
+      <tr>
+       <th>1</th>
+       <td>738</td>
+       <td>9745</td>
+      </tr>
+      <tr>
+       <th>2</th>
+       <td>319</td>
+       <td>7338</td>
+      </tr>
+      <tr>
+       <th>3</th>
+       <td>321</td>
+       <td>3379</td>
+      </tr>
+      <tr>
+       <th>4</th>
+       <td>737</td>
+       <td>2628</td>
+      </tr>
+      <tr>
+       <th>5</th>
+       <td>E90</td>
+       <td>1816</td>
+      </tr>
+      <tr>
+       <th>6</th>
+       <td>AT7</td>
+       <td>1529</td>
+      </tr>
+      <tr>
+       <th>7</th>
+       <td>333</td>
+       <td>1517</td>
+      </tr>
+      <tr>
+       <th>8</th>
+       <td>73G</td>
+       <td>1406</td>
+      </tr>
+      <tr>
+       <th>9</th>
+       <td>332</td>
+       <td>1386</td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <p md-src-pos="18726..18766"><img src="http://localhost:63342/markdownPreview/1813697937/Q6RA.jpeg" alt="Relational Algebra Diagram" __idea-generated="true" md-src-pos="18726..18766" data-original-src="Q6RA.jpeg"></p>
+   <h2 id="question-7-extended-ra-aggregate-functions" md-src-pos="18768..18816">Question 7 (Extended RA: Aggregate Functions)</h2>
+   <h3 id="what-is-the-average-number-of-unique-destination-countries-reachable-from-each-country" md-src-pos="18818..18908">What is the average number of unique destination countries reachable from each country</h3>
+   <pre class="code-fence" md-src-pos="18911..19467"><div class="code-fence-highlighter-copy-button" data-fence-content="cXVlcnlfcXVlc3Rpb243ID0gIiIiClNFTEVDVAogICAgb3JpZ2luX2MuIkNvdW50cnlfTmFtZSIgQVMgb3JpZ2luX2NvdW50cnksCiAgICBDT1VOVChESVNUSU5DVCBkZXN0X2MuIkNvdW50cnlfTmFtZSIpIEFTIHJlYWNoYWJsZV9jb3VudHJpZXMKRlJPTSByb3V0ZXMgcgpKT0lOIGFpcnBvcnRzIG9yaWdpbl9hIE9OIHIuIlNvdXJjZV9haXJwb3J0IiA9IG9yaWdpbl9hLiJJQVRBIgpKT0lOIGNvdW50cmllcyBvcmlnaW5fYyBPTiBvcmlnaW5fYS4iQ291bnRyeSIgPSBvcmlnaW5fYy4iQ291bnRyeV9OYW1lIgpKT0lOIGFpcnBvcnRzIGRlc3RfYSBPTiByLiJEZXN0aW5hdGlvbl9haXJwb3J0IiA9IGRlc3RfYS4iSUFUQSIKSk9JTiBjb3VudHJpZXMgZGVzdF9jIE9OIGRlc3RfYS4iQ291bnRyeSIgPSBkZXN0X2MuIkNvdW50cnlfTmFtZSIKR1JPVVAgQlkgb3JpZ2luX2MuIkNvdW50cnlfTmFtZSIKT1JERVIgQlkgcmVhY2hhYmxlX2NvdW50cmllcyBERVNDOwoiIiIKcTdfZGYgPSBwZC5yZWFkX3NxbChxdWVyeV9xdWVzdGlvbjcsIGVuZ2luZSkKcTdfZGY=">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code class="language-python" md-src-pos="18911..19467"><span md-src-pos="17270..17280"></span><span md-src-pos="17280..17296">query_question7 </span><span md-src-pos="17296..17297" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="17297..17298"> </span><span md-src-pos="17298..17302" style="color: rgb(106, 171, 115);">"""
+</span><span md-src-pos="17302..17309" style="color: rgb(106, 171, 115);">SELECT
+</span><span md-src-pos="17309..17356" style="color: rgb(106, 171, 115);">    origin_c."Country_Name" AS origin_country,
+</span><span md-src-pos="17356..17421" style="color: rgb(106, 171, 115);">    COUNT(DISTINCT dest_c."Country_Name") AS reachable_countries
+</span><span md-src-pos="17421..17435" style="color: rgb(106, 171, 115);">FROM routes r
+</span><span md-src-pos="17435..17498" style="color: rgb(106, 171, 115);">JOIN airports origin_a ON r."Source_airport" = origin_a."IATA"
+</span><span md-src-pos="17498..17570" style="color: rgb(106, 171, 115);">JOIN countries origin_c ON origin_a."Country" = origin_c."Country_Name"
+</span><span md-src-pos="17570..17634" style="color: rgb(106, 171, 115);">JOIN airports dest_a ON r."Destination_airport" = dest_a."IATA"
+</span><span md-src-pos="17634..17700" style="color: rgb(106, 171, 115);">JOIN countries dest_c ON dest_a."Country" = dest_c."Country_Name"
+</span><span md-src-pos="17700..17733" style="color: rgb(106, 171, 115);">GROUP BY origin_c."Country_Name"
+</span><span md-src-pos="17733..17768" style="color: rgb(106, 171, 115);">ORDER BY reachable_countries DESC;
+</span><span md-src-pos="17768..17771" style="color: rgb(106, 171, 115);">"""</span><span md-src-pos="17771..17772">
+</span><span md-src-pos="17772..17778">q7_df </span><span md-src-pos="17778..17779" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="17779..17782"> pd</span><span md-src-pos="17782..17783" style="color: rgb(188, 190, 196);">.</span><span md-src-pos="17783..17791">read_sql</span><span md-src-pos="17791..17792" style="color: rgb(188, 190, 196);">(</span><span md-src-pos="17792..17807">query_question7</span><span md-src-pos="17807..17808" style="color: rgb(188, 190, 196);">,</span><span md-src-pos="17808..17815"> engine</span><span md-src-pos="17815..17816" style="color: rgb(188, 190, 196);">)</span><span md-src-pos="17816..17817">
+</span><span md-src-pos="17817..17823">q7_df
+</span><span md-src-pos="17823..17826"></span></code></pre>
+   <p md-src-pos="19469..19486"><strong md-src-pos="19469..19486">Query Result:</strong></p>
+   <div>
+    <table border="1" class="dataframe">
+     <thead>
+      <tr style="text-align: right;">
+       <th></th>
+       <th>origin_country</th>
+       <th>reachable_countries</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <th>0</th>
+       <td>France</td>
+       <td>112</td>
+      </tr>
+      <tr>
+       <th>1</th>
+       <td>United Kingdom</td>
+       <td>98</td>
+      </tr>
+      <tr>
+       <th>2</th>
+       <td>Germany</td>
+       <td>96</td>
+      </tr>
+      <tr>
+       <th>3</th>
+       <td>United States</td>
+       <td>90</td>
+      </tr>
+      <tr>
+       <th>4</th>
+       <td>Turkiye</td>
+       <td>90</td>
+      </tr>
+      <tr>
+       <th>...</th>
+       <td>...</td>
+       <td>...</td>
+      </tr>
+      <tr>
+       <th>217</th>
+       <td>Falkland Islands</td>
+       <td>1</td>
+      </tr>
+      <tr>
+       <th>218</th>
+       <td>Tuvalu</td>
+       <td>1</td>
+      </tr>
+      <tr>
+       <th>219</th>
+       <td>Saint Pierre and Miquelon</td>
+       <td>1</td>
+      </tr>
+      <tr>
+       <th>220</th>
+       <td>Niue</td>
+       <td>1</td>
+      </tr>
+      <tr>
+       <th>221</th>
+       <td>Samoa</td>
+       <td>1</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>222 rows × 2 columns</p>
+   </div>
+   <p md-src-pos="20631..20671"><img src="http://localhost:63342/markdownPreview/1813697937/Q7RA.jpeg" alt="Relational Algebra Diagram" __idea-generated="true" md-src-pos="20631..20671" data-original-src="Q7RA.jpeg"></p>
+   <h2 id="question-8-extended-ra-aggregate-functions" md-src-pos="20673..20721">Question 8 (Extended RA: Aggregate Functions)</h2>
+   <h3 id="what-are-the-top-5-countries-where-the-ratio-of-total-outgoing-routes-from-all-airports-in-the-country-to-the-countrys-gdp-per-capita-is-the-highest" md-src-pos="20723..20879">What are the top 5 countries where the ratio of total outgoing routes (from all airports in the country) to the country's GDP per Capita is the highest?</h3>
+   <pre class="code-fence" md-src-pos="20882..21702"><div class="code-fence-highlighter-copy-button" data-fence-content="cXVlcnlfcXVlc3Rpb24wOCA9ICIiIgpXSVRIIG91dGdvaW5nX3Blcl9jb3VudHJ5IEFTICgKICAgIFNFTEVDVCAKICAgICAgICBhLiJDb3VudHJ5IiwKICAgICAgICBDT1VOVCgqKSBBUyBvdXRnb2luZ19yb3V0ZXMKICAgIEZST00gcm91dGVzIHIKICAgIEpPSU4gYWlycG9ydHMgYSAKICAgICAgICBPTiByLiJTb3VyY2VfYWlycG9ydF9JRCIgPSBhLiJBaXJwb3J0X0lEIgogICAgR1JPVVAgQlkgYS4iQ291bnRyeSIKKSwKY291bnRyeV93aXRoX2dkcCBBUyAoCiAgICBTRUxFQ1QKICAgICAgICBjLiJDb3VudHJ5X05hbWUiLAogICAgICAgIGMuIkdEUF9wZXJfY2FwaXRhX2N1cnJlbnRfVVMiCiAgICBGUk9NIGNvdW50cmllcyBjCiAgICBXSEVSRSBjLiJHRFBfcGVyX2NhcGl0YV9jdXJyZW50X1VTIiBJUyBOT1QgTlVMTAogICAgICBBTkQgYy4iR0RQX3Blcl9jYXBpdGFfY3VycmVudF9VUyIgPiAwCikKU0VMRUNUIAogICAgb2cuIkNvdW50cnkiLAogICAgb2cub3V0Z29pbmdfcm91dGVzLAogICAgY2cuIkdEUF9wZXJfY2FwaXRhX2N1cnJlbnRfVVMiIEFTIGdkcF9wZXJfY2FwaXRhLAogICAgKG9nLm91dGdvaW5nX3JvdXRlcyAvIGNnLiJHRFBfcGVyX2NhcGl0YV9jdXJyZW50X1VTIikgQVMgcmF0aW8KRlJPTSBvdXRnb2luZ19wZXJfY291bnRyeSBvZwpKT0lOIGNvdW50cnlfd2l0aF9nZHAgY2cKICAgIE9OIG9nLiJDb3VudHJ5IiA9IGNnLiJDb3VudHJ5X05hbWUiCk9SREVSIEJZIHJhdGlvIERFU0MKTElNSVQgNTsKIiIiCgpxOF9kZiA9IHBkLnJlYWRfc3FsKHF1ZXJ5X3F1ZXN0aW9uMDgsIGVuZ2luZSkKcThfZGY=">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code class="language-python" md-src-pos="20882..21702"><span md-src-pos="19241..19251"></span><span md-src-pos="19251..19268">query_question08 </span><span md-src-pos="19268..19269" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="19269..19270"> </span><span md-src-pos="19270..19274" style="color: rgb(106, 171, 115);">"""
+</span><span md-src-pos="19274..19305" style="color: rgb(106, 171, 115);">WITH outgoing_per_country AS (
+</span><span md-src-pos="19305..19317" style="color: rgb(106, 171, 115);">    SELECT 
+</span><span md-src-pos="19317..19338" style="color: rgb(106, 171, 115);">        a."Country",
+</span><span md-src-pos="19338..19374" style="color: rgb(106, 171, 115);">        COUNT(*) AS outgoing_routes
+</span><span md-src-pos="19374..19392" style="color: rgb(106, 171, 115);">    FROM routes r
+</span><span md-src-pos="19392..19413" style="color: rgb(106, 171, 115);">    JOIN airports a 
+</span><span md-src-pos="19413..19463" style="color: rgb(106, 171, 115);">        ON r."Source_airport_ID" = a."Airport_ID"
+</span><span md-src-pos="19463..19488" style="color: rgb(106, 171, 115);">    GROUP BY a."Country"
+</span><span md-src-pos="19488..19491" style="color: rgb(106, 171, 115);">),
+</span><span md-src-pos="19491..19513" style="color: rgb(106, 171, 115);">country_with_gdp AS (
+</span><span md-src-pos="19513..19524" style="color: rgb(106, 171, 115);">    SELECT
+</span><span md-src-pos="19524..19550" style="color: rgb(106, 171, 115);">        c."Country_Name",
+</span><span md-src-pos="19550..19588" style="color: rgb(106, 171, 115);">        c."GDP_per_capita_current_US"
+</span><span md-src-pos="19588..19609" style="color: rgb(106, 171, 115);">    FROM countries c
+</span><span md-src-pos="19609..19661" style="color: rgb(106, 171, 115);">    WHERE c."GDP_per_capita_current_US" IS NOT NULL
+</span><span md-src-pos="19661..19705" style="color: rgb(106, 171, 115);">      AND c."GDP_per_capita_current_US" &gt; 0
+</span><span md-src-pos="19705..19707" style="color: rgb(106, 171, 115);">)
+</span><span md-src-pos="19707..19715" style="color: rgb(106, 171, 115);">SELECT 
+</span><span md-src-pos="19715..19733" style="color: rgb(106, 171, 115);">    og."Country",
+</span><span md-src-pos="19733..19757" style="color: rgb(106, 171, 115);">    og.outgoing_routes,
+</span><span md-src-pos="19757..19811" style="color: rgb(106, 171, 115);">    cg."GDP_per_capita_current_US" AS gdp_per_capita,
+</span><span md-src-pos="19811..19878" style="color: rgb(106, 171, 115);">    (og.outgoing_routes / cg."GDP_per_capita_current_US") AS ratio
+</span><span md-src-pos="19878..19907" style="color: rgb(106, 171, 115);">FROM outgoing_per_country og
+</span><span md-src-pos="19907..19932" style="color: rgb(106, 171, 115);">JOIN country_with_gdp cg
+</span><span md-src-pos="19932..19972" style="color: rgb(106, 171, 115);">    ON og."Country" = cg."Country_Name"
+</span><span md-src-pos="19972..19992" style="color: rgb(106, 171, 115);">ORDER BY ratio DESC
+</span><span md-src-pos="19992..20001" style="color: rgb(106, 171, 115);">LIMIT 5;
+</span><span md-src-pos="20001..20004" style="color: rgb(106, 171, 115);">"""</span><span md-src-pos="20004..20005">
+</span><span md-src-pos="20005..20006">
+</span><span md-src-pos="20006..20012">q8_df </span><span md-src-pos="20012..20013" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="20013..20016"> pd</span><span md-src-pos="20016..20017" style="color: rgb(188, 190, 196);">.</span><span md-src-pos="20017..20025">read_sql</span><span md-src-pos="20025..20026" style="color: rgb(188, 190, 196);">(</span><span md-src-pos="20026..20042">query_question08</span><span md-src-pos="20042..20043" style="color: rgb(188, 190, 196);">,</span><span md-src-pos="20043..20050"> engine</span><span md-src-pos="20050..20051" style="color: rgb(188, 190, 196);">)</span><span md-src-pos="20051..20052">
+</span><span md-src-pos="20052..20058">q8_df
+</span><span md-src-pos="20058..20061"></span></code></pre>
+   <p md-src-pos="21704..21721"><strong md-src-pos="21704..21721">Query Result:</strong></p>
+   <div>
+    <table border="1" class="dataframe">
+     <thead>
+      <tr style="text-align: right;">
+       <th></th>
+       <th>Country</th>
+       <th>outgoing_routes</th>
+       <th>gdp_per_capita</th>
+       <th>ratio</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <th>0</th>
+       <td>China</td>
+       <td>8013</td>
+       <td>12951.178240</td>
+       <td>0.618708</td>
+      </tr>
+      <tr>
+       <th>1</th>
+       <td>India</td>
+       <td>1145</td>
+       <td>2530.120313</td>
+       <td>0.452548</td>
+      </tr>
+      <tr>
+       <th>2</th>
+       <td>Pakistan</td>
+       <td>249</td>
+       <td>1365.169274</td>
+       <td>0.182395</td>
+      </tr>
+      <tr>
+       <th>3</th>
+       <td>Indonesia</td>
+       <td>817</td>
+       <td>4876.307745</td>
+       <td>0.167545</td>
+      </tr>
+      <tr>
+       <th>4</th>
+       <td>Madagascar</td>
+       <td>65</td>
+       <td>508.718428</td>
+       <td>0.127772</td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <p md-src-pos="22641..22681"><img src="http://localhost:63342/markdownPreview/1813697937/Q8RA.jpeg" alt="Relational Algebra Diagram" __idea-generated="true" md-src-pos="22641..22681" data-original-src="Q8RA.jpeg"></p>
+   <h2 id="question-9-extended-ra-aggregate-functions" md-src-pos="22683..22731">Question 9 (Extended RA: Aggregate Functions)</h2>
+   <h3 id="which-airports-have-the-largest-disparity-between-the-number-of-outgoing-and-incoming-routes" md-src-pos="22733..22830">Which airports have the largest disparity between the number of outgoing and incoming routes?</h3>
+   <pre class="code-fence" md-src-pos="22832..23764"><div class="code-fence-highlighter-copy-button" data-fence-content="cXVlcnlfcXVlc3Rpb245ID0gIiIiCldJVEggb3V0Z29pbmcgQVMgKAogICAgU0VMRUNUIAogICAgICAgIHIuIlNvdXJjZV9haXJwb3J0X0lEIiBBUyBhaXJwb3J0X2lkLAogICAgICAgIENPVU5UKCopIEFTIG91dGdvaW5nX2NvdW50CiAgICBGUk9NIHJvdXRlcyByCiAgICBHUk9VUCBCWSByLiJTb3VyY2VfYWlycG9ydF9JRCIKKSwKaW5jb21pbmcgQVMgKAogICAgU0VMRUNUIAogICAgICAgIHIuIkRlc3RpbmF0aW9uX2FpcnBvcnRfSUQiIEFTIGFpcnBvcnRfaWQsCiAgICAgICAgQ09VTlQoKikgQVMgaW5jb21pbmdfY291bnQKICAgIEZST00gcm91dGVzIHIKICAgIEdST1VQIEJZIHIuIkRlc3RpbmF0aW9uX2FpcnBvcnRfSUQiCiksCmNvbWJpbmVkIEFTICgKICAgIFNFTEVDVAogICAgICAgIGEuIkFpcnBvcnRfSUQiLAogICAgICAgIGEuIk5hbWUiLAogICAgICAgIGEuIkNpdHkiLAogICAgICAgIGEuIkNvdW50cnkiLAogICAgICAgIENPQUxFU0NFKG8ub3V0Z29pbmdfY291bnQsIDApIEFTIG91dGdvaW5nX2NvdW50LAogICAgICAgIENPQUxFU0NFKGkuaW5jb21pbmdfY291bnQsIDApIEFTIGluY29taW5nX2NvdW50LAogICAgICAgIEFCUyhDT0FMRVNDRShvLm91dGdvaW5nX2NvdW50LCAwKSAtIENPQUxFU0NFKGkuaW5jb21pbmdfY291bnQsIDApKSBBUyBkaXNwYXJpdHkKICAgIEZST00gYWlycG9ydHMgYQogICAgTEVGVCBKT0lOIG91dGdvaW5nIG8gT04gYS4iQWlycG9ydF9JRCIgPSBvLmFpcnBvcnRfaWQKICAgIExFRlQgSk9JTiBpbmNvbWluZyBpIE9OIGEuIkFpcnBvcnRfSUQiID0gaS5haXJwb3J0X2lkCikKU0VMRUNUICoKRlJPTSBjb21iaW5lZApPUkRFUiBCWSBkaXNwYXJpdHkgREVTQwpMSU1JVCAxMDsKIiIiCnE5X2RmID0gcGQucmVhZF9zcWwocXVlcnlfcXVlc3Rpb245LCBlbmdpbmUpCnE5X2Rm">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code class="language-python" md-src-pos="22832..23764"><span md-src-pos="21191..21201"></span><span md-src-pos="21201..21217">query_question9 </span><span md-src-pos="21217..21218" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="21218..21219"> </span><span md-src-pos="21219..21223" style="color: rgb(106, 171, 115);">"""
+</span><span md-src-pos="21223..21242" style="color: rgb(106, 171, 115);">WITH outgoing AS (
+</span><span md-src-pos="21242..21254" style="color: rgb(106, 171, 115);">    SELECT 
+</span><span md-src-pos="21254..21299" style="color: rgb(106, 171, 115);">        r."Source_airport_ID" AS airport_id,
+</span><span md-src-pos="21299..21334" style="color: rgb(106, 171, 115);">        COUNT(*) AS outgoing_count
+</span><span md-src-pos="21334..21352" style="color: rgb(106, 171, 115);">    FROM routes r
+</span><span md-src-pos="21352..21387" style="color: rgb(106, 171, 115);">    GROUP BY r."Source_airport_ID"
+</span><span md-src-pos="21387..21390" style="color: rgb(106, 171, 115);">),
+</span><span md-src-pos="21390..21404" style="color: rgb(106, 171, 115);">incoming AS (
+</span><span md-src-pos="21404..21416" style="color: rgb(106, 171, 115);">    SELECT 
+</span><span md-src-pos="21416..21466" style="color: rgb(106, 171, 115);">        r."Destination_airport_ID" AS airport_id,
+</span><span md-src-pos="21466..21501" style="color: rgb(106, 171, 115);">        COUNT(*) AS incoming_count
+</span><span md-src-pos="21501..21519" style="color: rgb(106, 171, 115);">    FROM routes r
+</span><span md-src-pos="21519..21559" style="color: rgb(106, 171, 115);">    GROUP BY r."Destination_airport_ID"
+</span><span md-src-pos="21559..21562" style="color: rgb(106, 171, 115);">),
+</span><span md-src-pos="21562..21576" style="color: rgb(106, 171, 115);">combined AS (
+</span><span md-src-pos="21576..21587" style="color: rgb(106, 171, 115);">    SELECT
+</span><span md-src-pos="21587..21611" style="color: rgb(106, 171, 115);">        a."Airport_ID",
+</span><span md-src-pos="21611..21629" style="color: rgb(106, 171, 115);">        a."Name",
+</span><span md-src-pos="21629..21647" style="color: rgb(106, 171, 115);">        a."City",
+</span><span md-src-pos="21647..21668" style="color: rgb(106, 171, 115);">        a."Country",
+</span><span md-src-pos="21668..21725" style="color: rgb(106, 171, 115);">        COALESCE(o.outgoing_count, 0) AS outgoing_count,
+</span><span md-src-pos="21725..21782" style="color: rgb(106, 171, 115);">        COALESCE(i.incoming_count, 0) AS incoming_count,
+</span><span md-src-pos="21782..21870" style="color: rgb(106, 171, 115);">        ABS(COALESCE(o.outgoing_count, 0) - COALESCE(i.incoming_count, 0)) AS disparity
+</span><span md-src-pos="21870..21890" style="color: rgb(106, 171, 115);">    FROM airports a
+</span><span md-src-pos="21890..21948" style="color: rgb(106, 171, 115);">    LEFT JOIN outgoing o ON a."Airport_ID" = o.airport_id
+</span><span md-src-pos="21948..22006" style="color: rgb(106, 171, 115);">    LEFT JOIN incoming i ON a."Airport_ID" = i.airport_id
+</span><span md-src-pos="22006..22008" style="color: rgb(106, 171, 115);">)
+</span><span md-src-pos="22008..22017" style="color: rgb(106, 171, 115);">SELECT *
+</span><span md-src-pos="22017..22031" style="color: rgb(106, 171, 115);">FROM combined
+</span><span md-src-pos="22031..22055" style="color: rgb(106, 171, 115);">ORDER BY disparity DESC
+</span><span md-src-pos="22055..22065" style="color: rgb(106, 171, 115);">LIMIT 10;
+</span><span md-src-pos="22065..22068" style="color: rgb(106, 171, 115);">"""</span><span md-src-pos="22068..22069">
+</span><span md-src-pos="22069..22075">q9_df </span><span md-src-pos="22075..22076" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="22076..22079"> pd</span><span md-src-pos="22079..22080" style="color: rgb(188, 190, 196);">.</span><span md-src-pos="22080..22088">read_sql</span><span md-src-pos="22088..22089" style="color: rgb(188, 190, 196);">(</span><span md-src-pos="22089..22104">query_question9</span><span md-src-pos="22104..22105" style="color: rgb(188, 190, 196);">,</span><span md-src-pos="22105..22112"> engine</span><span md-src-pos="22112..22113" style="color: rgb(188, 190, 196);">)</span><span md-src-pos="22113..22114">
+</span><span md-src-pos="22114..22120">q9_df
+</span><span md-src-pos="22120..22123"></span></code></pre>
+   <p md-src-pos="23766..23783"><strong md-src-pos="23766..23783">Query Result:</strong></p>
+   <div>
+    <table border="1" class="dataframe">
+     <thead>
+      <tr style="text-align: right;">
+       <th></th>
+       <th>Airport_ID</th>
+       <th>Name</th>
+       <th>City</th>
+       <th>Country</th>
+       <th>outgoing_count</th>
+       <th>incoming_count</th>
+       <th>disparity</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <th>0</th>
+       <td>2006</td>
+       <td>Auckland International Airport</td>
+       <td>Auckland</td>
+       <td>New Zealand</td>
+       <td>79</td>
+       <td>99</td>
+       <td>20</td>
+      </tr>
+      <tr>
+       <th>1</th>
+       <td>2074</td>
+       <td>Prince Mohammad Bin Abdulaziz Airport</td>
+       <td>Madinah</td>
+       <td>Saudi Arabia</td>
+       <td>34</td>
+       <td>50</td>
+       <td>16</td>
+      </tr>
+      <tr>
+       <th>2</th>
+       <td>73</td>
+       <td>Halifax / Stanfield International Airport</td>
+       <td>Halifax</td>
+       <td>Canada</td>
+       <td>19</td>
+       <td>30</td>
+       <td>11</td>
+      </tr>
+      <tr>
+       <th>3</th>
+       <td>4059</td>
+       <td>Jomo Kenyatta International Airport</td>
+       <td>Nairobi</td>
+       <td>Kenya</td>
+       <td>97</td>
+       <td>107</td>
+       <td>10</td>
+      </tr>
+      <tr>
+       <th>4</th>
+       <td>3941</td>
+       <td>Eleftherios Venizelos International Airport</td>
+       <td>Athens</td>
+       <td>Greece</td>
+       <td>166</td>
+       <td>176</td>
+       <td>10</td>
+      </tr>
+      <tr>
+       <th>5</th>
+       <td>1638</td>
+       <td>Humberto Delgado Airport (Lisbon Portela Airport)</td>
+       <td>Lisbon</td>
+       <td>Portugal</td>
+       <td>194</td>
+       <td>202</td>
+       <td>8</td>
+      </tr>
+      <tr>
+       <th>6</th>
+       <td>3862</td>
+       <td>Portland International Jetport Airport</td>
+       <td>Portland</td>
+       <td>United States</td>
+       <td>1</td>
+       <td>9</td>
+       <td>8</td>
+      </tr>
+      <tr>
+       <th>7</th>
+       <td>346</td>
+       <td>Munich Airport</td>
+       <td>Munich</td>
+       <td>Germany</td>
+       <td>326</td>
+       <td>318</td>
+       <td>8</td>
+      </tr>
+      <tr>
+       <th>8</th>
+       <td>1382</td>
+       <td>Charles de Gaulle International Airport</td>
+       <td>Paris</td>
+       <td>France</td>
+       <td>476</td>
+       <td>469</td>
+       <td>7</td>
+      </tr>
+      <tr>
+       <th>9</th>
+       <td>3861</td>
+       <td>Louis Armstrong New Orleans International Airport</td>
+       <td>New Orleans</td>
+       <td>United States</td>
+       <td>70</td>
+       <td>77</td>
+       <td>7</td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <p md-src-pos="26235..26275"><img src="http://localhost:63342/markdownPreview/1813697937/Q9RA.jpeg" alt="Relational Algebra Diagram" __idea-generated="true" md-src-pos="26235..26275" data-original-src="Q9RA.jpeg"></p>
+   <h2 id="question-10-extended-ra-aggregate-functions" md-src-pos="26277..26326">Question 10 (Extended RA: Aggregate Functions)</h2>
+   <h3 id="what-are-the-top-10-cities-globally-based-on-the-total-number-of-airports" md-src-pos="26328..26407">What are the top 10 cities globally, based on the total number of airports?</h3>
+   <pre class="code-fence" md-src-pos="26409..26773"><div class="code-fence-highlighter-copy-button" data-fence-content="cXVlcnlfcXVlc3Rpb24xMCA9ICIiIgpTRUxFQ1QgCiAgICBhLiJDaXR5IiwKICAgIGEuIkNvdW50cnkiLAogICAgQ09VTlQoKikgQVMgYWlycG9ydF9jb3VudCwKICAgIFNUUklOR19BR0coYS4iTmFtZSIsICcsICcgT1JERVIgQlkgYS4iTmFtZSIpIEFTIGFpcnBvcnRfbmFtZXMKRlJPTSBhaXJwb3J0cyBhCldIRVJFIGEuIkNpdHkiIElTIE5PVCBOVUxMCiAgQU5EIGEuIkNpdHkiIDw+ICcnCkdST1VQIEJZIGEuIkNpdHkiLCBhLiJDb3VudHJ5IgpPUkRFUiBCWSBhaXJwb3J0X2NvdW50IERFU0MKTElNSVQgMTA7CiIiIgoKcTEwX2RmID0gcGQucmVhZF9zcWwocXVlcnlfcXVlc3Rpb24xMCwgZW5naW5lKQpxMTBfZGY=">
+  <img class="code-fence-highlighter-copy-button-icon" data-original-src="" src="http://localhost:63342/markdownPreview/1813697937/">
+  <span class="tooltiptext">Copy to clipboard</span>
+</div><code class="language-python" md-src-pos="26409..26773"><span md-src-pos="24768..24778"></span><span md-src-pos="24778..24795">query_question10 </span><span md-src-pos="24795..24796" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="24796..24797"> </span><span md-src-pos="24797..24801" style="color: rgb(106, 171, 115);">"""
+</span><span md-src-pos="24801..24809" style="color: rgb(106, 171, 115);">SELECT 
+</span><span md-src-pos="24809..24823" style="color: rgb(106, 171, 115);">    a."City",
+</span><span md-src-pos="24823..24840" style="color: rgb(106, 171, 115);">    a."Country",
+</span><span md-src-pos="24840..24871" style="color: rgb(106, 171, 115);">    COUNT(*) AS airport_count,
+</span><span md-src-pos="24871..24937" style="color: rgb(106, 171, 115);">    STRING_AGG(a."Name", ', ' ORDER BY a."Name") AS airport_names
+</span><span md-src-pos="24937..24953" style="color: rgb(106, 171, 115);">FROM airports a
+</span><span md-src-pos="24953..24980" style="color: rgb(106, 171, 115);">WHERE a."City" IS NOT NULL
+</span><span md-src-pos="24980..25001" style="color: rgb(106, 171, 115);">  AND a."City" &lt;&gt; ''
+</span><span md-src-pos="25001..25032" style="color: rgb(106, 171, 115);">GROUP BY a."City", a."Country"
+</span><span md-src-pos="25032..25060" style="color: rgb(106, 171, 115);">ORDER BY airport_count DESC
+</span><span md-src-pos="25060..25070" style="color: rgb(106, 171, 115);">LIMIT 10;
+</span><span md-src-pos="25070..25073" style="color: rgb(106, 171, 115);">"""</span><span md-src-pos="25073..25074">
+</span><span md-src-pos="25074..25075">
+</span><span md-src-pos="25075..25082">q10_df </span><span md-src-pos="25082..25083" style="color: rgb(188, 190, 196);">=</span><span md-src-pos="25083..25086"> pd</span><span md-src-pos="25086..25087" style="color: rgb(188, 190, 196);">.</span><span md-src-pos="25087..25095">read_sql</span><span md-src-pos="25095..25096" style="color: rgb(188, 190, 196);">(</span><span md-src-pos="25096..25112">query_question10</span><span md-src-pos="25112..25113" style="color: rgb(188, 190, 196);">,</span><span md-src-pos="25113..25120"> engine</span><span md-src-pos="25120..25121" style="color: rgb(188, 190, 196);">)</span><span md-src-pos="25121..25122">
+</span><span md-src-pos="25122..25129">q10_df
+</span><span md-src-pos="25129..25132"></span></code></pre>
+   <p md-src-pos="26775..26792"><strong md-src-pos="26775..26792">Query Result:</strong></p>
+   <div>
+    <table border="1" class="dataframe">
+     <thead>
+      <tr style="text-align: right;">
+       <th></th>
+       <th>City</th>
+       <th>Country</th>
+       <th>airport_count</th>
+       <th>airport_names</th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr>
+       <th>0</th>
+       <td>Columbus</td>
+       <td>United States</td>
+       <td>8</td>
+       <td>Bolton Field, Columbus Metropolitan Airport, C...</td>
+      </tr>
+      <tr>
+       <th>1</th>
+       <td>New York</td>
+       <td>United States</td>
+       <td>6</td>
+       <td>Downtown-Manhattan/Wall St Heliport, Indianola...</td>
+      </tr>
+      <tr>
+       <th>2</th>
+       <td>Moscow</td>
+       <td>Russian Federation</td>
+       <td>6</td>
+       <td>Bykovo Airport, Domodedovo International Airpo...</td>
+      </tr>
+      <tr>
+       <th>3</th>
+       <td>London</td>
+       <td>United Kingdom</td>
+       <td>6</td>
+       <td>London City Airport, London Gatwick Airport, L...</td>
+      </tr>
+      <tr>
+       <th>4</th>
+       <td>Jacksonville</td>
+       <td>United States</td>
+       <td>6</td>
+       <td>Cecil Airport, Jacksonville Executive at Craig...</td>
+      </tr>
+      <tr>
+       <th>5</th>
+       <td>Houston</td>
+       <td>United States</td>
+       <td>6</td>
+       <td>Andrau Airpark, David Wayne Hooks Memorial Air...</td>
+      </tr>
+      <tr>
+       <th>6</th>
+       <td>Atlanta</td>
+       <td>United States</td>
+       <td>5</td>
+       <td>Cobb County-Mc Collum Field, DeKalb Peachtree ...</td>
+      </tr>
+      <tr>
+       <th>7</th>
+       <td>Greenville</td>
+       <td>United States</td>
+       <td>5</td>
+       <td>Donaldson Field Airport, Greenville Downtown A...</td>
+      </tr>
+      <tr>
+       <th>8</th>
+       <td>Izmir</td>
+       <td>Turkiye</td>
+       <td>5</td>
+       <td>Adnan Menderes International Airport, Çiğli Ai...</td>
+      </tr>
+      <tr>
+       <th>9</th>
+       <td>Vancouver</td>
+       <td>Canada</td>
+       <td>5</td>
+       <td>Coal Harbour Seaplane Base, Harbour (Public) H...</td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <p md-src-pos="28761..28802"><img src="http://localhost:63342/markdownPreview/1813697937/Q10RA.jpeg" alt="Relational Algebra Diagram" __idea-generated="true" md-src-pos="28761..28802" data-original-src="Q10RA.jpeg"></p>
+  </div>
+ </body>
+</html>
