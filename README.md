@@ -1,19 +1,20 @@
-Github Repository: 
-
-Disclaimer: For an ideal viewing experience, open the root/README.html in your browser.
-
 # Global Air Network Socio-Economic Analysis
+
+**Philip Spaier and Emile Klerner**
+
+**Github Repository: https://github.com/Penguinbeanie/database_assigment_airtraffic.git**
+
+**Disclaimer: For an ideal viewing experience, open the root/README.html in your browser.**
 
 ## Project Overview
 
 This project aims to analyze the structure of the **Global Air Transportation Network** by integrating it with **country-level economic indicators**. The goal is to move beyond simple network connectivity to explore complex analytical questions regarding how national wealth, stability, and air travel infrastructure correlate.
----
+
 
 ## Setup and Data Ingestion
 
 This project utilizes `compose.yml` to set up the necessary database environment. Data is then ingested into the database using the `ingestion.sql` script, which populates the tables with cleaned and processed data.
 
----
 
 ## Data Sources
 
