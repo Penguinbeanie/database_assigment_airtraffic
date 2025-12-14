@@ -1242,3 +1242,52 @@ q10_df
 
 ![Relational Algebra Diagram](Q10RA.jpeg)
 
+
+# Routes Visualisation - Setup Guide
+
+## Quick Start
+
+The `routesVisualisation.html` displays an interactive network visualization of flight routes between the top airports.
+
+### Prerequisites
+
+- Python 3 (for the local web server)
+- The file `clean_data/routes.csv` must be present
+
+### Starting the Visualization
+
+1. **Open a terminal** and navigate to the project directory:
+   ```bash
+   cd /database_assigment_airtraffic
+   ```
+
+2. **Start a local web server**:
+   ```bash
+   python3 -m http.server 8000
+   ```
+
+3. **Open in your browser**:
+   ```
+   http://localhost:8000/visualisation/routesVisualisation.html
+   ```
+
+### Alternative: Different Port
+
+If port 8000 is already in use, you can use a different port:
+```bash
+python3 -m http.server 8080
+```
+Then open: `http://localhost:8080/visualisation/routesVisualisation.html`
+
+### Notes
+
+- The visualization automatically loads data from `clean_data/routes.csv`
+- A local web server is required to avoid CORS issues
+- The visualization shows the top 60 airports by number of routes
+- Click on an airport to show only its routes
+
+### Stopping the Server
+
+Press `Ctrl+C` in the terminal to stop the web server.
+
+
