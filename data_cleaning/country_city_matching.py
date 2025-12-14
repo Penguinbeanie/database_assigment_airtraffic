@@ -7,10 +7,6 @@ from rapidfuzz import fuzz, process
 def extract_country_city_from_airports_csv():
     """
     Extracts unique 'Country' and 'City' columns from the airports.csv file.
-    The path to the input CSV is constructed robustly relative to the script's location.
-    NaN values are filtered out before extracting unique values.
-    The unique countries are saved to 'unique_countries.csv' and unique cities to 'unique_cities.csv'
-    in the 'clean_data_mappings' directory.
     """
     script_dir = os.path.dirname(__file__)
     airports_csv_path = os.path.abspath(
@@ -56,13 +52,8 @@ def extract_country_city_from_airports_csv():
 '''
 def map_countries_fuzzywuzzy():
     """
-    Creates a mapping between countries in worldcities.csv and a list of unique countries
-    (from unique_countries.csv) using fuzzy matching (fuzzywuzzy library).
-    Reads worldcities.csv in chunks to avoid loading the entire file into memory.
-    Matches with a score >= 90 are saved to 'mapped_worldcities_countries.csv'.
-    Unique countries from 'unique_countries.csv' that do not find a match >= 90
-    are saved to 'unmapped_worldcities_countries.csv'.
-    All console output related to fuzzy mapping is handled within this function.
+    Maps countries from worldcities.csv to unique airport countries using rapidfuzz.
+    Saves matched and unmapped countries to CSVs.
     """
     script_dir = os.path.dirname(__file__)
     worldcities_csv_path = os.path.abspath(
@@ -184,13 +175,8 @@ def map_countries_fuzzywuzzy():
 
 def map_countries_to_gdp_fuzzywuzzy():
     """
-    Creates a mapping between countries in country_gdp.csv and a list of unique countries
-    (from unique_countries.csv) using fuzzy matching (fuzzywuzzy library).
-    Reads country_gdp.csv in chunks to avoid loading the entire file into memory.
-    Matches with a score >= 90 are saved to 'mapped_gdp_countries.csv'.
-    Unique countries from 'unique_countries.csv' that do not find a match >= 90
-    are saved to 'unmapped_gdp_countries.csv'.
-    All console output related to fuzzy mapping is handled within this function.
+    Maps countries from country_gdp.csv to unique airport countries using rapidfuzz.
+    Saves matched and unmapped countries to CSVs.
     """
     script_dir = os.path.dirname(__file__)
     country_gdp_csv_path = os.path.abspath(

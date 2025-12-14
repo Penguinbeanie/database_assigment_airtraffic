@@ -13,12 +13,12 @@ This project utilizes `compose.yml` to set up the necessary database environment
 
 ## Data Sources
 
-The project uses a foundation of core aviation data enriched by external, authoritative sources, with all processed data residing in the `clean_data` directory for ingestion.
+This project combines data from two main sources: one for aviation and one for country-level economics. After cleaning, the final datasets are stored in the `clean_data` folder, ready to be loaded into the database.
 
-| Source Name | Data Type | Key Linking Fields | URL |
+| Source | Description | Files & Row Counts | URL |
 | :--- | :--- | :--- | :--- |
-| **Global Air Transportation Network** (Kaggle) | Core Aviation Data | N/A (Internal) | `https://www.kaggle.com/datasets/thedevastator/global-air-transportation-network-mapping-the-wo/data` |
-| **World Bank DataBank** | Country Economic Data | `country` | `https://databank.worldbank.org/source/world-development-indicators` |
+| **Global Air Transportation Network** (Kaggle) | Core aviation data, valid for 2022. | `routes.csv` (67,661), `airports.csv` (7,697), `airlines.csv` (6,162), `airplanes.csv` (246) | `https://www.kaggle.com/datasets/thedevastator/global-air-transportation-network-mapping-the-wo/data` |
+| **World Bank DataBank** | Economic and social data, valid for 2023. | `country_gdp.csv` (265 rows), covering GDP, political stability, and population size. | `https://databank.worldbank.org/source/world-development-indicators` |
 
 ---
 
@@ -28,35 +28,52 @@ The database will consist of six primary tables. The linkages are defined by avi
 
 ### Core Aviation Tables (4)
 
-| Table Name | Description | Key Columns |
-| :--- | :--- | :--- |
-| `airlines` | Carrier details and operational status. | `Airline_ID` (PK), `Name`, `Alias`, `IATA`, `ICAO`, `Callsign`, `Active` |
-| `airplanes` | Aircraft model and identification codes. | `IATA` (PK), `Name`, `ICAO` |
-| `airports` | Geographic and infrastructure data for every airport. | `Airport_ID` (PK), `Name`, `City`, `Country`, `IATA`, `ICAO`, `Latitude`, `Longitude`, `Altitude`, `Timezone`, `DST`, `Tz_database_time_zone`, `Type`, `Source` (FK to `countries.Country_Name`) |
-| `routes` | Defined flight segments between two airports. | `Routes_ID` (PK), `Airline` (Name), `Airline_ID` (FK to `airlines.Airline_ID`), `Source_airport` (IATA/ICAO), `Source_airport_ID` (FK to `airports.Airport_ID`), `Destination_airport` (IATA/ICAO), `Destination_airport_ID` (FK to `airports.Airport_ID`), `Codeshare`, `Stops`, `Equipment` |
+| Table Name | Description | Key Columns                                                                                                                                                                                                                                                                                                          |
+| :--- | :--- |:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `airlines` | Carrier details and operational status. | `Airline_ID` (PK), `Name`, `Alias`, `IATA`, `ICAO`, `Callsign`, `Active`                                                                                                                                                                                                                                             |
+| `airplanes` | Aircraft model and identification codes. | `IATA` (PK), `Name`, `ICAO`                                                                                                                                                                                                                                                                                          |
+| `airports` | Geographic and infrastructure data for every airport. | `Airport_ID` (PK), `Name`, `City`, `Country`, `IATA`, `ICAO`, `Latitude`, `Longitude`, `Altitude`, `Timezone`, `DST`, `Tz_database_time_zone`, `Type`, `Source` (FK to `countries.Country_Name`)                                                                                                                     |
+| `routes` | Defined flight segments between two airports. | `Routes_ID` (PK), `Airline` (Name), `Airline_ID` (FK to `airlines.Airline_ID`), `Source_airport` (IATA/ICAO), `Source_airport_ID` (FK to `airports.Airport_ID`), `Destination_airport` (IATA/ICAO), `Destination_airport_ID` (FK to `airports.Airport_ID`), `Codeshare`, `Stops`, `Equipment` (FK to airplanes.IATA) |
 
 ### Enrichment Tables (1)
 
 This table introduces the socio-economic context for analysis.
 
-| Table Name | Source | Key Columns | Linkage to `airports` |
-| :--- | :--- | :--- | :--- |
-| `countries` | World Bank | **`Country_Name`** (PK), `Time`, `Time_Code`, `Country_Code`, `GDP_current_US`, `GDP_per_capita_current_US`, `Political_Stability`, `Population` | **Ideal:** `airports.Country` $\leftrightarrow$ `countries.Country_Name` |
+| Table Name | Source | Key Columns | Linkage to `airports`                                         |
+| :--- | :--- | :--- |:--------------------------------------------------------------|
+| `countries` | World Bank | **`Country_Name`** (PK), `Time`, `Time_Code`, `Country_Code`, `GDP_current_US`, `GDP_per_capita_current_US`, `Political_Stability`, `Population` | `airports.Country` $\leftrightarrow$ `countries.Country_Name` |
 
 ---
 
 ## Data Cleaning
 
-Our data cleaning process makes sure all the information is accurate and works well together. This involves:
+To get the data ready for analysis, we performed the following cleaning steps:
 
-*   **Making Country Names Consistent:** We find all unique country names from airport data. Then, we match country names from the economic (GDP) data to these standard names, creating a lookup table. As a first step, a fuzzy algorithm was used, matching everything above a 90% similarity. What remained was then matched by hand. This is necessary to ensure name consistency across datasets.
-*   **Connecting Economic Data:** We link the economic data (GDP) with the airline and airport information. This means we only keep economic data for countries that appear in our aviation data. If a country is in our aviation data but not in the original economic data, we add it with empty economic values.
-*   **Cleaning and Checking Flight Routes:**
-    *   **Fixing Missing IDs:** If some airport IDs are missing in the flight route data, we try to find them using airport names. If we can't find an ID, we remove that flight route. We also remove routes with airline IDs that aren't valid.
-    *   **Standardizing "Codeshare":** The "Codeshare" column (which shows if a flight is shared between airlines) is changed to a simple "0" (no) or "1" (yes).
-    *   **Ensuring All Connections Are Correct:** We thoroughly check that every flight route correctly links to existing airline IDs, airport IDs (for departure and arrival), and airplane types. If not, it is removed.
-*   **Removing Extra Information:** We remove duplicate ID codes (IATA/ICAO) in the airplane data to make sure each code is unique. Also, an unnecessary "index" column is taken out of the airline data.
-*   **Ensuring that each table has a unique and non-null primary key:** For each table, a suitable primary key was selected. If a row had no value, we removed it.
+### 1. Standardizing Values
+- **Fixing Null Values**: The source files used different ways to show null values (like `\N` or `<null>`). We standardized these to be consistent.
+- **Standardizing Booleans**: We changed fields like `Codeshare` to use a simple `1` (for true) or `0` (for false) instead of text like 'Y'.
+- **Cleaning Up Text**: We removed extra spaces and empty strings from text fields.
+
+### 2. Ensuring Data Integrity
+- **Handling Primary Keys**: We made sure every row in a table had a primary key. If a row was missing its key, we removed it.
+- **Removing Duplicates**: We deleted any rows that were exact duplicates of each other.
+- **Removing Conflicting Rows**: In some cases, the same primary key was used for different rows. We removed these conflicting entries, as they likely represented outdated data.
+- **Removing Incomplete Rows**: We got rid of rows that were mostly empty because they weren't useful for analysis.
+
+### 3. Combining and Validating Datasets
+- **Matching Country Names**: The country names in the aviation and economic datasets didn't always match (e.g., "Bahamas" vs "Bahamas, The").
+
+  For example, some country name mismatches we found:
+
+  | World Bank Name   | Kaggle Name       |
+  | :---------------- | :---------------- |
+  | "Bahamas, The"    | "Bahamas"         |
+  | "North Macedonia" | "Macedonia"       |
+  | "Myanmar"         | "Burma"           |
+  - We used a fuzzy-matching script (`rapidfuzz`) to automatically match names that were over 90% similar.
+  - We manually fixed the rest of the names that didn't get matched.
+  - Finally, we only kept economic data for countries that were present in our airport data.
+- **Validating Routes**: We checked that every flight route correctly linked to an existing airline and airport. If a route had an invalid ID, we removed it.
 
 ---
 
